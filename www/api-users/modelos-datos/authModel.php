@@ -76,6 +76,19 @@ class AuthModel
 		return $resultArray;
 	}
 
+	public function getUserById($id){
+		$query = "SELECT * FROM users WHERE id = $id";
+		$results = $this->connection->query($query);
+
+		$resulArray = array();
+		if($results != false){
+			foreach($results as $value){
+				$resulArray[] = $value;
+			}
+		}
+		return $resulArray;
+	}
+
 
 
 	// public function insertarLog($milog){

@@ -58,3 +58,5 @@ CREATE TABLE deckcard (
 
 INSERT INTO users(id,email,passwd,nick,imageUri,token,deckList) 
 VALUES ('1','admin@admin.com','8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918','admin',null,null,"")
+ALTER TABLE `deck` CHANGE `numCards` `numCards` INT NOT NULL DEFAULT '0';
+ALTER TABLE `deck` CHANGE `deckImage` `deckImage` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL;

@@ -168,10 +168,11 @@ class Authentication extends AuthModel
 	public function getNick ($token){		//devuelve el nick del usuario a partir de su token
 		$data = JWT::decode($token, $this->key, array('HS256'));
 
-		$user = parent::getById($data->data->id);
-
+		$user = parent::getUserById($data->data->id);
+		// print_r($user);exit;
+		// $this->idUser = $data->data->id;
 		// echo $user['nick']; exit;
-		return $user['nick'];
+		return $user[0]['nick'];
 	}
 
 	public function modifyToken($id, $email){
