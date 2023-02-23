@@ -180,7 +180,7 @@ class Database
 	{
 		$query = "DELETE FROM $table WHERE id = $id";
 		$this->connection->query($query);
-
+		// echo $query; exit;
 		if(!$this->connection->affected_rows){
 			return 0;
 		}
@@ -188,6 +188,5 @@ class Database
 		return $this->connection->affected_rows;
 	}
 }
-
 
 ?>

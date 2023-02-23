@@ -14,13 +14,14 @@ class Deck extends Database
 
     //parámetros permitidos para la inserción. Al hacer el POST
     private $allowedConditions_insert = array(
-        'user_id',
+        'id',
         'name',
         'deckImage'
     );
 
     //parámetros permitidos para la actualización.
     private $allowedConditions_update = array(
+        'id',
         'name',
         'deckImage'
     );
@@ -70,10 +71,10 @@ class Deck extends Database
     private function validateUpdate($data)
     {
 
-        if (!isset($data['name']) || empty($data['name'])) {
+        if (!isset($data['id']) || empty($data['id'])) {
             $response = array(
                 'result' => 'error',
-                'details' => 'El campo name es obligatorio'
+                'details' => 'El campo id es obligatorio'
             );
 
             Response::result(400, $response);

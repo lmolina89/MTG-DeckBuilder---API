@@ -10,7 +10,7 @@ $auth->verify();  /* VERIFICAMOS LA AUTENTICACIÓN.  */
 //hasta aquí, el token está perfectamente verificada.
 $deck = new deck();  //creamos un objeto de la clase deck.
 
-switch ($_SERVER['REQUEST_METHOD']) {
+switch ($_SERVER['REQUEST_METHOD']) {	
 	case 'GET':
 		$params = $_GET; //leemos los parámetros por URL
 		/*
@@ -155,10 +155,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		/*
 		Es obligatorio el id por GET
 		*/
+		// $params = $_REQUEST;
+		// print_r($_REQUEST['id']);exit;
 		if(!isset($_GET['id']) || empty($_GET['id'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'Error en la solicitud'
+				'details' => 'Error en la solicitud de eliminacion'
 			);
 
 			Response::result(400, $response);

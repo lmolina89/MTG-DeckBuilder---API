@@ -18,9 +18,9 @@ CREATE TABLE `deck` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `name` VARCHAR(50) NOT NULL,
-  `numCards` int NOT NULL,
-  `userDeck` VARCHAR(300) DEFAULT NULL,
-  `deckImage` VARCHAR(300) NOT NULL,
+  `numCards` INT NOT NULL DEFAULT '0',
+  `userDeck` VARCHAR(300) NULL DEFAULT NULL,
+  `deckImage` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id),
   PRIMARY KEY (id)
 );
@@ -58,5 +58,5 @@ CREATE TABLE deckcard (
 
 INSERT INTO users(id,email,passwd,nick,imageUri,token,deckList) 
 VALUES ('1','admin@admin.com','8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918','admin',null,null,"")
-ALTER TABLE `deck` CHANGE `numCards` `numCards` INT NOT NULL DEFAULT '0';
-ALTER TABLE `deck` CHANGE `deckImage` `deckImage` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL;
+-- ALTER TABLE `deck` CHANGE `numCards` `numCards` INT NOT NULL DEFAULT '0';
+-- ALTER TABLE `deck` CHANGE `deckImage` `deckImage` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL;
