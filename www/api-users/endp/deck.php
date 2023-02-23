@@ -135,9 +135,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		 * toca actualizar el token del deck, ya que modificó obligatoriamente
 		 * el campo email.
 		 */
-		$auth->modifyToken($_GET['id'], $params["email"]);
+		// $auth->modifyToken($_GET['id'], $params["email"]);
 		$response = array(
-			'result' => 'ok'
+			'result' => 'ok',
+			'details' => 'Se ha actualizado correctamente'
 		);
 
 		Response::result(200, $response);
@@ -156,7 +157,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		Es obligatorio el id por GET
 		*/
 		// $params = $_REQUEST;
-		// print_r($_REQUEST['id']);exit;
+		// print_r($_GET);exit;
 		if(!isset($_GET['id']) || empty($_GET['id'])){
 			$response = array(
 				'result' => 'error',

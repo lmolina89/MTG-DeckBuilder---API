@@ -9,14 +9,15 @@ class Deck extends Database
     //parámetros permitidos para hacer consultas selección.
 //sólo permito hacer consultas get siempre que esten estos parámetros aqui
     private $allowedConditions_get = array(
-        'user_id'
+        'user_id',
+        'name'
     );
 
     //parámetros permitidos para la inserción. Al hacer el POST
     private $allowedConditions_insert = array(
         'id',
-        'name',
-        'deckImage'
+        'user_id',
+        'name'
     );
 
     //parámetros permitidos para la actualización.
@@ -70,8 +71,8 @@ class Deck extends Database
 
     private function validateUpdate($data)
     {
-
-        if (!isset($data['id']) || empty($data['id'])) {
+        // echo $_GET['id'];exit;
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
             $response = array(
                 'result' => 'error',
                 'details' => 'El campo id es obligatorio'
@@ -121,14 +122,16 @@ class Deck extends Database
 
     public function insert($params)
     {
+        // print_r($params);exit;
         //recordamos que params, es un array asociaivo del tipo 'id'=>'1', 'nick'=>'santi'
         foreach ($params as $key => $param) {
-            //echo $key." = ".$params[$key];
+            // echo $key." = ".$params[$key]." ";exit;
             if (!in_array($key, $this->allowedConditions_insert)) {
+                print_r($key);
                 unset($params[$key]);
                 $response = array(
                     'result' => 'error',
-                    'details' => 'Error en la solicitud. Parametro no permitido'
+                    'details' => 'Error en la solicitud. Parametro no permitido al insertar'
                 );
 
                 Response::result(400, $response);
@@ -184,39 +187,39 @@ class Deck extends Database
         if ($this->validateUpdate($params)) {
  
             //Si mandamos imagen.
-            if (isset($params['deckImage'])) {
-                //necesito saber el nombre del fichero antiguo a partir del id y eliminarlo del servidor.
-                $decks = parent::getDB($this->table, $_GET);
-                $deck = $decks[0];
-                $imagen_antigua = $deck['deckImage'];
-                //echo $imagen_antigua;
-                $path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
-                //si no puedo eliminar la imagen antigua, lo indico.
-                if ($imagen_antigua != null && !unlink($path)) {
-                    $response = array(
-                        'result' => 'warning',
-                        'details' => 'No se ha podido eliminar el fichero antiguo'
-                    );
-                    Response::result(200, $response);
-                    exit;
+            // if (isset($params['deckImage'])) {
+            //     //necesito saber el nombre del fichero antiguo a partir del id y eliminarlo del servidor.
+            //     $decks = parent::getDB($this->table, $_GET);
+            //     $deck = $decks[0];
+            //     $imagen_antigua = $deck['deckImage'];
+            //     //echo $imagen_antigua;
+            //     $path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
+            //     //si no puedo eliminar la imagen antigua, lo indico.
+            //     if ($imagen_antigua != null && !unlink($path)) {
+            //         $response = array(
+            //             'result' => 'warning',
+            //             'details' => 'No se ha podido eliminar el fichero antiguo'
+            //         );
+            //         Response::result(200, $response);
+            //         exit;
 
-                }
+            //     }
 
-                /*foreach ($usu as $item => $value) 
-                echo $item.": ".$value;
-                */
-                //exit;
+            //     /*foreach ($usu as $item => $value) 
+            //     echo $item.": ".$value;
+            //     */
+            //     //exit;
 
-                //ahora tengo que crear la nueva imagen y actualizar registro.
+            //     //ahora tengo que crear la nueva imagen y actualizar registro.
 
-                // $img_array = explode(';base64,', $params['deckImage']); //datos de la imagen
-                // $extension = strtoupper(explode('/', $img_array[0])[1]); //formato de la imagen
-                // $datos_imagen = $img_array[1]; //aqui me quedo con la imagen
-                // $nombre_imagen = uniqid(); //creo un único id.
-                // $path = dirname(__DIR__, 1) . "/public/img/" . $nombre_imagen . "." . $extension;
-                // file_put_contents($path, base64_decode($datos_imagen)); //subimos la imagen al servidor.
-                // $params['deckImage'] = $nombre_imagen . '.' . $extension; //pasamos como parametro en foto, con el nombre y extensión completo.
-            } //fin isset
+            //     // $img_array = explode(';base64,', $params['deckImage']); //datos de la imagen
+            //     // $extension = strtoupper(explode('/', $img_array[0])[1]); //formato de la imagen
+            //     // $datos_imagen = $img_array[1]; //aqui me quedo con la imagen
+            //     // $nombre_imagen = uniqid(); //creo un único id.
+            //     // $path = dirname(__DIR__, 1) . "/public/img/" . $nombre_imagen . "." . $extension;
+            //     // file_put_contents($path, base64_decode($datos_imagen)); //subimos la imagen al servidor.
+            //     // $params['deckImage'] = $nombre_imagen . '.' . $extension; //pasamos como parametro en foto, con el nombre y extensión completo.
+            // } //fin isset
 
 
 
@@ -240,8 +243,9 @@ class Deck extends Database
 	{
 		//Necesito eliminar su imagen, en el supuesto de que exista.	
 		$decks = parent::getDB($this->table, $_GET);
-		$usuario = $decks[0];
-		$imagen_antigua = $usuario['deckImage'];
+        // print_r($decks);exit;
+		$deck = $decks[0];
+		$imagen_antigua = $deck['deckImage'];
 		if (!empty($imagen_antigua)) {
 			$path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
 			if (!unlink($path)) {
