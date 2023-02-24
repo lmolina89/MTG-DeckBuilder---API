@@ -18,7 +18,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		los parámetros y devuelve un array con los datos en forma de array.
 		*/
 		if (isset($_GET['id']) && !empty($_GET['id'])){
-            echo "Pasamos id_usuario es ".$_GET['id_usuario']." y el id del token es ".$auth->getIdUser();
+            // echo "Pasamos id_usuario es ".$_GET['id_usuario']." y el id del token es ".$auth->getIdUser();
             if ($_GET['id'] != $auth->getIdUser()){
                 $response = array(
                     'result' => 'error',
@@ -35,11 +35,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 		$decks = $deck->get($params);
         //$auth->insertarLog('lleva a solicitud de decks');
-        $url_raiz_img = "http://".$_SERVER['HTTP_HOST']."/api-users/public/img";
-		for($i=0; $i< count($decks); $i++){
-			if (!empty($decks[$i]['imagen']))
-				$decks[$i]['imagen'] = $url_raiz_img ."/". $decks[$i]['imagen'];
-		}
+        // $url_raiz_img = "http://".$_SERVER['HTTP_HOST']."/api-users/public/img";
+		// for($i=0; $i< count($decks); $i++){
+		// 	if (!empty($decks[$i]['imagen']))
+		// 		$decks[$i]['imagen'] = $url_raiz_img ."/". $decks[$i]['imagen'];
+		// }
 
         $response = array(
             'result'=> 'ok',
