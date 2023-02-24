@@ -127,7 +127,7 @@ class Deck extends Database
         foreach ($params as $key => $param) {
             // echo $key." = ".$params[$key]." ";exit;
             if (!in_array($key, $this->allowedConditions_insert)) {
-                print_r($key);
+                // print_r($key);
                 unset($params[$key]);
                 $response = array(
                     'result' => 'error',
@@ -169,7 +169,7 @@ class Deck extends Database
         foreach ($params as $key => $parm) {
             if (!in_array($key, $this->allowedConditions_update)) {
                 unset($params[$key]);
-                echo $params[$key];
+                // echo $params[$key];
                 $response = array(
                     'result' => 'error',
                     'details' => 'Error en la solicitud dentro del modelo datos'

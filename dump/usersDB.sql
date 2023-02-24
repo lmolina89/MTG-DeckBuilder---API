@@ -46,7 +46,7 @@ CREATE TABLE `card` (
 --
 
 INSERT INTO `card` (`id`, `name`, `manacost`, `cmc`, `atributes`, `text`, `artist`, `expansion`, `imageUri`, `numCopies`) VALUES
-('023b5e6f-10de-422d-8431-11f1fdeca246', 'Abu Ja\'far', '{W}', 1, '0/1', 'When Abu Ja\'far dies, destroy all creatures blocking or blocked by it. They can\'t be regenerated', 'Ken Meyer, Jr.', 'Chronicles', 'https://cards.scryfall.io/normal/front/d/2/d25ff6aa-a01d-49f2-926f-8f5457143b5c.jpg?1583542840', 0);
+('023b5e6f-10de-422d-8431-11f1fdeca246', 'Abu Jafar', '{W}', 1, '0/1', 'When Abu Jafar dies, destroy all creatures blocking or blocked by it. They cant be regenerated', 'Ken Meyer, Jr.', 'Chronicles', 'https://cards.scryfall.io/normal/front/d/2/d25ff6aa-a01d-49f2-926f-8f5457143b5c.jpg?1583542840', 0);
 
 -- --------------------------------------------------------
 
@@ -180,3 +180,9 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+-- SELECT c.*
+-- FROM card c
+-- JOIN deckcard dc ON c.id = dc.card_id
+-- WHERE dc.deck_id = 7
