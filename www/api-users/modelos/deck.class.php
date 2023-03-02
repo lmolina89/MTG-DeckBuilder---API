@@ -5,19 +5,20 @@ require_once '../modelos-datos/database.php';
 class Deck extends Database
 {
     private $table = 'deck'; //nombre de la tabla
-
+    private $table_dc = 'deckcard';
     //parámetros permitidos para hacer consultas selección.
 //sólo permito hacer consultas get siempre que esten estos parámetros aqui
     private $allowedConditions_get = array(
         'user_id',
-        'name'
+        'deck_id'
     );
 
     //parámetros permitidos para la inserción. Al hacer el POST
     private $allowedConditions_insert = array(
         'id',
         'user_id',
-        'name'
+        'name',
+        'deckImage'
     );
 
     //parámetros permitidos para la actualización.
@@ -41,30 +42,18 @@ class Deck extends Database
             exit;
         }
 
-
-
-        // if (isset($data['deckImage']) && !empty($data['deckImage'])) {
-
-        //     /*
-        //     separo por la secuencia ;base64, el lado derecho, 
-        //     es el archivo y el lado izquierdo el tipo de fichero(formato codificación).
-        //     */
-        //     $img_array = explode(';base64,', $data['deckImage']);
-        //     //hago un explode para separar por / y la parte derecha es la extensión y la izquierda 'data_image'
-        //     //lo paso a mayúsculas, por tanto tengo JPEG ó PNG ó JPG
-        //     $extension = strtoupper(explode('/', $img_array[0])[1]); //me quedo con jpeg
-        //     if ($extension != 'PNG' && $extension != 'JPG' && $extension != 'JPEG') {
-        //         $response = array('result' => 'error', 'details' => 'Formato de la imagen no permitida, sólo PNG/JPE/JPEG');
-        //         Response::result(400, $response);
-        //         exit;
-        //     } //fin extensión
-        //     /*echo "La imagen es: ".$img_array[1]."<br>";
-        //     echo "La extensión es: ".$extension;
-        //     exit;*/
-        // } //fin isset 
-
-
-
+        if (isset($data['deckImage']) & !empty($data['deckImage'])) {
+            $img_array = explode(';base64,', $data['deckImage']);
+            $extension = strtoupper(explode('/', $img_array[0])[1]);
+            if ($extension != 'PNG' && $extension != 'JPG' && $extension != 'JPEG') {
+                $response = array(
+                    'result' => 'error',
+                    'details' => 'Formato de la imagen no permitida, sólo PNG/JPE/JPEG'
+                );
+                Response::result(400, $response);
+                exit;
+            }
+        }
         return true;
     }
 
@@ -82,28 +71,28 @@ class Deck extends Database
             exit;
         }
 
-        // if (isset($data['deckImage']) && !empty($data['deckImage'])) {
-        // 	$img_array = explode(';base64,', $data['deckImage']);
-        // 	$extension = strtoupper(explode('/', $img_array[0])[1]); //me quedo con jpeg
-        // 	if ($extension != 'PNG' && $extension != 'JPG' && $extension != 'JPEG') {
-        // 		$response = array('result' => 'error', 'details' => 'Formato de la imagen no permitida, sólo PNG/JPE/JPEG');
-        // 		Response::result(400, $response);
-        // 		exit;
-        // 	} //fin extensión
-        // } //fin isset 
-
+         if (isset($data['deckImage']) && !empty($data['deckImage'])) {
+         	$img_array = explode(';base64,', $data['deckImage']);
+         	$extension = strtoupper(explode('/', $img_array[0])[1]); //me quedo con jpeg
+         	if ($extension != 'PNG' && $extension != 'JPG' && $extension != 'JPEG' && $extension!='WEBP') {
+         		$response = array('result' => 'error', 'details' => 'Formato de la imagen no permitida, sólo PNG/JPE/JPEG');
+         		Response::result(400, $response);
+         		exit;
+         	} //fin extensión
+         } //fin isset
         return true;
     }
 
 
     public function get($params)
     {
+//        print_r($params);exit;
         foreach ($params as $key => $param) {
             if (!in_array($key, $this->allowedConditions_get)) {
                 unset($params[$key]);
                 $response = array(
                     'result' => 'error',
-                    'details' => 'Error en la solicitud'
+                    'details' => 'Error en la solicitud get en deck.class'
                 );
 
                 Response::result(400, $response);
@@ -112,9 +101,9 @@ class Deck extends Database
         }
 
         //ejecuta el método getDB de Database. Contendrá todos los decks.
-        if($params['user_id'] == 1){
-            return parent::getDB($this->table);
-        }
+//        if($params['user_id'] == 1){
+//            return parent::getDB($this->table);
+//        }
         $decks = parent::getDB($this->table, $params);
         return $decks;
     }
@@ -142,22 +131,22 @@ class Deck extends Database
 
         if ($this->validateInsert($params)) {
 
-            // if (isset($params['deckImage'])) {
-            // 	/*echo "Tiene imagen";
-            // 	exit;*/
-            // 	$img_array = explode(';base64,', $params['deckImage']); //datos de la imagen
-            // 	$extension = strtoupper(explode('/', $img_array[0])[1]); //formato de la imagen
-            // 	$datos_imagen = $img_array[1]; //aqui me quedo con la imagen
-            // 	$nombre_imagen = uniqid(); //creo un único id.
-            // 	//del directorio actual de user.class, subo un nivel (1) y estando en el directorio api-pueblos, concateno public\img
-            // 	$path = dirname(__DIR__, 1) . "/public/img/" . $nombre_imagen . "." . $extension;
-            // 	/*echo "La imagen es ".$nombre_imagen.".".$extension;
-            // 	echo "El path es ".$path;
-            // 	exit;*/
-            // 	file_put_contents($path, base64_decode($datos_imagen)); //subimos la imagen al servidor.
-            // 	$params['deckImage'] = $nombre_imagen . '.' . $extension; //pasamos como parametro en foto, con el nombre y extensión completo.
-            // 	//exit;  //hay que quitarlo una vez verificado que se sube la imagen
-            // } //fin isset
+             if (isset($params['deckImage'])) {
+//             	echo "Tiene imagen";
+//             	exit;
+             	$img_array = explode(';base64,', $params['deckImage']); //datos de la imagen
+             	$extension = strtoupper(explode('/', $img_array[0])[1]); //formato de la imagen
+             	$datos_imagen = $img_array[1]; //aqui me quedo con la imagen
+             	$nombre_imagen = uniqid(); //creo un único id.
+             	//del directorio actual de user.class, subo un nivel (1) y estando en el directorio api-pueblos, concateno public\img
+             	$path = dirname(__DIR__, 1) . "/public/img/" . $nombre_imagen . "." . $extension;
+//             	echo "La imagen es ".$nombre_imagen.".".$extension;
+//             	echo "El path es ".$path;
+//             	exit;
+             	file_put_contents($path, base64_decode($datos_imagen)); //subimos la imagen al servidor.
+             	$params['deckImage'] = $nombre_imagen . '.' . $extension; //pasamos como parametro en foto, con el nombre y extensión completo.
+//             	exit;  //hay que quitarlo una vez verificado que se sube la imagen
+             } //fin isset
 
             //se llama al padre con el método inserDB.
             return parent::insertDB($this->table, $params);
@@ -185,43 +174,41 @@ class Deck extends Database
         obligatorios, como el email, password y si está el parámetro disponible, que sea booleano
         */
         if ($this->validateUpdate($params)) {
- 
-            //Si mandamos imagen.
-            // if (isset($params['deckImage'])) {
-            //     //necesito saber el nombre del fichero antiguo a partir del id y eliminarlo del servidor.
-            //     $decks = parent::getDB($this->table, $_GET);
-            //     $deck = $decks[0];
-            //     $imagen_antigua = $deck['deckImage'];
-            //     //echo $imagen_antigua;
-            //     $path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
-            //     //si no puedo eliminar la imagen antigua, lo indico.
-            //     if ($imagen_antigua != null && !unlink($path)) {
-            //         $response = array(
-            //             'result' => 'warning',
-            //             'details' => 'No se ha podido eliminar el fichero antiguo'
-            //         );
-            //         Response::result(200, $response);
-            //         exit;
 
-            //     }
+//            Si mandamos imagen.
+             if (isset($params['deckImage'])) {
+                 //necesito saber el nombre del fichero antiguo a partir del id y eliminarlo del servidor.
+                 $decks = parent::getDB($this->table, $_GET);
+                 $deck = $decks[0];
+                 $imagen_antigua = $deck['deckImage'];
+                 //echo $imagen_antigua;
+                 $path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
+                 //si no puedo eliminar la imagen antigua, lo indico.
+                 if ($imagen_antigua != null && !unlink($path)) {
+                     $response = array(
+                         'result' => 'warning',
+                         'details' => 'No se ha podido eliminar el fichero antiguo'
+                     );
+                     Response::result(200, $response);
+                     exit;
 
-            //     /*foreach ($usu as $item => $value) 
-            //     echo $item.": ".$value;
-            //     */
-            //     //exit;
+                 }
 
-            //     //ahora tengo que crear la nueva imagen y actualizar registro.
+                 /*foreach ($usu as $item => $value)
+                 echo $item.": ".$value;
+                 */
+                 //exit;
 
-            //     // $img_array = explode(';base64,', $params['deckImage']); //datos de la imagen
-            //     // $extension = strtoupper(explode('/', $img_array[0])[1]); //formato de la imagen
-            //     // $datos_imagen = $img_array[1]; //aqui me quedo con la imagen
-            //     // $nombre_imagen = uniqid(); //creo un único id.
-            //     // $path = dirname(__DIR__, 1) . "/public/img/" . $nombre_imagen . "." . $extension;
-            //     // file_put_contents($path, base64_decode($datos_imagen)); //subimos la imagen al servidor.
-            //     // $params['deckImage'] = $nombre_imagen . '.' . $extension; //pasamos como parametro en foto, con el nombre y extensión completo.
-            // } //fin isset
+                 //ahora tengo que crear la nueva imagen y actualizar registro.
 
-
+                  $img_array = explode(';base64,', $params['deckImage']); //datos de la imagen
+                  $extension = strtoupper(explode('/', $img_array[0])[1]); //formato de la imagen
+                  $datos_imagen = $img_array[1]; //aqui me quedo con la imagen
+                  $nombre_imagen = uniqid(); //creo un único id.
+                  $path = dirname(__DIR__, 1) . "/public/img/" . $nombre_imagen . "." . $extension;
+                  file_put_contents($path, base64_decode($datos_imagen)); //subimos la imagen al servidor.
+                  $params['deckImage'] = $nombre_imagen . '.' . $extension; //pasamos como parametro en foto, con el nombre y extensión completo.
+             } //fin isset
 
 
             //actualizamos el registro a partir de una query que habrá que armar en updateDB
@@ -239,42 +226,45 @@ class Deck extends Database
         }
     }
 
-	public function delete($id)
-	{
-		//Necesito eliminar su imagen, en el supuesto de que exista.	
-		$decks = parent::getDB($this->table, $_GET);
+    public function delete($id)
+    {
+        //Necesito eliminar su imagen, en el supuesto de que exista.
+//		$decks = parent::getDB($this->table, $_GET);
         // print_r($decks);exit;
-		$deck = $decks[0];
-		$imagen_antigua = $deck['deckImage'];
-		if (!empty($imagen_antigua)) {
-			$path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
-			if (!unlink($path)) {
-				$response = array(
-					'result' => 'warning',
-					'details' => 'No se ha podido eliminar la imagen del usuario'
-				);
-				Response::result(200, $response);
-				exit;
-			}
-		}
+//		$deck = $decks[0];
+//		$imagen_antigua = $deck['deckImage'];
+//		if (!empty($imagen_antigua)) {
+//			$path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
+//			if (!unlink($path)) {
+//				$response = array(
+//					'result' => 'warning',
+//					'details' => 'No se ha podido eliminar la imagen del usuario'
+//				);
+//				Response::result(200, $response);
+//				exit;
+//			}
+//		}
+//        echo $id;exit;
+//        echo $id;exit;
+        parent::deleteDB($this->table_dc, $id);
+//        echo "se supone que se han eliminado";
+        //exit;
 
-		$affected_rows = parent::deleteDB($this->table, $id);
+        $affected_rows = parent::deleteDB($this->table, $id);
+//        echo $affected_rows; exit;
+        if ($affected_rows == 0) {
+            $response = array(
+                'result' => 'error',
+                'details' => 'No hubo cambios'
+            );
 
-		if ($affected_rows == 0) {
-			$response = array(
-				'result' => 'error',
-				'details' => 'No hubo cambios'
-			);
-
-			Response::result(200, $response);
-			exit;
-		}
-	}
-
-
-
-
+            Response::result(200, $response);
+            exit;
+        }
+//        echo "stop"; exit;
+    }
 
 
 }
+
 ?>

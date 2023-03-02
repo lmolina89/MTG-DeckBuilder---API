@@ -22,29 +22,20 @@ class Card extends Database
         'text',
         'artist',
         'expansion',
-        'imageUri',
-        'numCopies'
+        'imageUri'
     );
 
     //parámetros permitidos para la actualización.
     private $allowedConditions_update = array(
         'deck_id',
-        'id',
-        'name',
-        'manacost',
-        'cmc',
-        'atributes',
-        'text',
-        'artist',
-        'expansion',
-        'imageUri',
-        'numCopies'
+        'card_id',
+        'action'
     );
 
     private function validateInsert($data)
     {
 
-        if (!isset($data['id']) || empty($data['name'])) {
+        if (!isset($data['id']) || empty($data['id'])) {
             $response = array(
                 'result' => 'error',
                 'details' => 'El campo id de la carta es obligatorio'
@@ -54,27 +45,49 @@ class Card extends Database
             exit;
         }
 
+
         return true;
     }
 
-    private function validateUpdate()
+    private function validateInsertDeckCard()
     {
-        if (!isset($_GET['id']) || empty($_GET['id'])) {
+        if (!isset($data['deck_id']) || empty($data['deck_id'])) {
+            $response = array(
+                'result' => 'error',
+                'details' => 'El campo deck_id es obligatorio'
+            );
+
+            Response::result(400, $response);
+            exit;
+        }
+
+        return true;
+    }
+
+    private function validateUpdate($data)
+    {
+        if (!isset($data['card_id']) || empty($data['card_id'])) {
             $response = array(
                 'result' => 'error',
                 'details' => 'El campo id de la carta es obligatorio'
             );
             Response::result(400, $response);
-
         }
 
-        if (!isset($_GET['deck_id']) || empty($_GET['deck_id'])) {
+        if (!isset($data['deck_id']) || empty($data['deck_id'])) {
             $response = array(
                 'result' => 'error',
                 'details' => 'El campo id del mazo es obligatorio'
             );
             Response::result(400, $response);
+        }
 
+        if (!isset($data['action']) || empty($data['action'])) {
+            $response = array(
+                'result' => 'error',
+                'details' => 'El campo action es obligatorio'
+            );
+            Response::result(400, $response);
         }
 
         return true;
@@ -82,7 +95,7 @@ class Card extends Database
 
     public function get($params)
     {
- 
+
         foreach ($params as $key => $param) {
             if (!in_array($key, $this->allowedConditions_get)) {
                 unset($params[$key]);
@@ -94,8 +107,8 @@ class Card extends Database
                 exit;
             }
         }
-    
-        return parent::get_db_join($this->table_dc, $this->table_c, $params);
+
+        return parent::getDBJoin($this->table_dc, $this->table_c, $params);
     }
 
     public function insert($params)
@@ -112,75 +125,62 @@ class Card extends Database
                 exit;
             }
         }
-
+//        echo "Dentro de insert de card.class.php\n";
         if ($this->validateInsert($params)) {
-            return parent::insertDB($this->table_dc, $params);
+            return parent::insertDBJoin($this->table_dc, $this->table_c, $params);
         }
     }
 
-    public function update($id, $params)
+    public function update($params)
     {
         foreach ($params as $key => $param) {
             if (!in_array($key, $this->allowedConditions_update)) {
                 unset($params[$key]);
                 $response = array(
                     'result' => 'error',
-                    'details' => 'Error en la solicitud dentro del modelo datos'
+                    'details' => 'Error en la solicitud dentro del modelo datos(update)'
                 );
-
-                Response::result(400, $response);
+                Response::result(200, $response);
                 exit;
             }
-
-            if ($this->validateUpdate($params)) {
-                $affected_rows = parent::updateDB($this->table, $id, $params);
-
-                if ($affected_rows == 0) {
-                    $response = array(
-                        'result' => 'error',
-                        'details' => 'No hubo cambios'
-                    );
-
-                    Response::result(200, $response);
-                    exit;
-                }
+        }
+        if ($this->validateUpdate($params)) {
+            if (!parent::updateDBJoin($this->table_dc, $this->table_c, $params)) {
+                $response = array(
+                    'result' => 'error',
+                    'details' => 'No hubo cambios'
+                );
+                Response::result(200, $response);
+                exit;
             }
         }
+        return true;
     }
 
 
-    public function delete($id)
+    public function delete($data)
     {
-        $cards = parent::getDB($this->table, $_GET);
-        $card = $cards[0];
+//        print_r($data);exit;
+
+        $affected_rows = parent::deleteDBJoin($this->table_dc, $data);
+
+        if ($affected_rows == 0) {
+            $response = array(
+                'result' => 'error',
+                'details' => 'No hubo cambios'
+            );
+            Response::result(200, $response);
+            exit;
+        }
+
+
 
     }
 
-// if (!empty($imagen_antigua)) {
-// 	$path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
-// 	if (!unlink($path)) {
-// 		$response = array(
-// 			'result' => 'warning',
-// 			'details' => 'No se ha podido eliminar la imagen del usuario'
-// 		);
-// 		Response::result(200, $response);
-// 		exit;
-// 	}
-// }
+
 
 // $affected_rows = parent::deleteDB($);
 // $affected_rows = parent::deleteDB();
-
-// if($affected_rows == 0){
-//     $response = array(
-//         'result' => 'error',
-//         'details' => 'No hubo cambios'
-//     )
-//     Response::result(200,$response);
-//     exit;
-// }
-
-
 
 
 }
