@@ -89,11 +89,4 @@ class AuthModel
 		return $resulArray;
 	}
 
-
-
-	// public function insertarLog($milog){
-	// 	$query = "INSERT INTO log (log) VALUES('$milog')";
-	// 	//echo $query;exit;
-	// 	$this->connection->query($query);
-	// }
 }

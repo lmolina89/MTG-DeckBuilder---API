@@ -23,9 +23,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
         $card_list = $card->get($params);
         // print_r($card_list);exit;
-
-
-
         $response = array(
             'result' => 'ok',
             'cards' => $card_list
@@ -33,7 +30,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
         Response::result(200, $response);
         break;
-
 
     case 'POST':
         $params = json_decode(file_get_contents('php://input'), true);
@@ -74,7 +70,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
             Response::result(400, $response);
             exit;
         }
-
 
         $params['deck_id'] = $_GET['deck_id'];
 //        print_r($params);exit;
@@ -121,7 +116,5 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
         Response::result(200,$response);
         break;
-}
-
-
+    }
 ?>

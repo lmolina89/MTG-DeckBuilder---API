@@ -75,7 +75,10 @@ class Deck extends Database
          	$img_array = explode(';base64,', $data['deckImage']);
          	$extension = strtoupper(explode('/', $img_array[0])[1]); //me quedo con jpeg
          	if ($extension != 'PNG' && $extension != 'JPG' && $extension != 'JPEG' && $extension!='WEBP') {
-         		$response = array('result' => 'error', 'details' => 'Formato de la imagen no permitida, sólo PNG/JPE/JPEG');
+         		$response = array(
+                    'result' => 'error',
+                     'details' => 'Formato de la imagen no permitida, sólo PNG/JPE/JPEG/WEBP'
+                );
          		Response::result(400, $response);
          		exit;
          	} //fin extensión

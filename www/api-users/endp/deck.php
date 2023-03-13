@@ -49,22 +49,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         Response::result(200, $response);
         break;
 
-
-    /*
-    Los parámetros en caso de inserción, no se define en la URL, sino en el body
-    con los datos de un JSON. Por ejemplo,
-    {
-        "nombres"= "Juan",
-        "disponible"=1
-    }
-
-    Al momento de enviarlo, vemos que es un POST y recuperamos los parámetro a través de
-    la función json_decode(file_get_contents()). Transforma en un array asociativo
-    Si hizo un post pero no recibe ningún dato en JSON, devuelve un error 400. En caso de que
-    si llegaran bien los parámetros, pasamos a ejecutar nuestro insert con los parámetros.
-
-    Nos devuelve el id del registro insertado. Después armamos la respuesta. 201 de create.
-    */
     case 'POST':
         /*
         Los parámetros del body, los recupera a partir de la función file_get_contents('php://input')
@@ -94,10 +78,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $insert_id_deck = $params_deck_id['deck_id'];
 //        echo $params_deck_id["deck_id"];
 
-
-
-
-
         $response = array(
             'result' => 'ok',
             'insert_id' => $insert_id_deck,
@@ -105,8 +85,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         );
 
         Response::result(201, $response);
-
-
         break;
 
     /**
