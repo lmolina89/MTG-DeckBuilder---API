@@ -20,7 +20,7 @@ RUN docker-php-ext-install gd
 RUN a2enmod rewrite
 
 COPY ./run.sh /bin/run.sh
-CMD ['/bin/run.sh']
+CMD ["/bin/run.sh"]
 
 RUN a2enmod ssl
 RUN a2ensite default-ssl.conf
