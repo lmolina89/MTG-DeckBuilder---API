@@ -18,14 +18,11 @@ services:
   www:
     build: .
     ports:
-      - "8080:80"
-      - "8443:443"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./www:/var/www/html
       - ./apache-config.conf:/etc/apache2/conf-available/my-apache.conf
-      - /etc/nginx:/etc/nginx  # Monta el directorio de configuración de NGINX  
-      - /etc/nginx/certificate.crt  # Ruta al archivo de certificado
-      - /etc/nginx/private.key  #Ruta a la llave privada
     links:
       - db
     networks:

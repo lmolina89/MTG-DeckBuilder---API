@@ -1,0 +1,40 @@
+@REM root@554bcde01ab0:/etc/letsencrypt/live/mtgdeckbuilder.redirectme.net# ls -l
+@REM total 4
+@REM -rw-r--r-- 1 root root 692 Jun  1 19:49 README
+@REM lrwxrwxrwx 1 root root  53 Jun  1 19:49 cert.pem -> ../../archive/mtgdeckbuilder.redirectme.net/cert1.pem
+@REM lrwxrwxrwx 1 root root  54 Jun  1 19:49 chain.pem -> ../../archive/mtgdeckbuilder.redirectme.net/chain1.pem
+@REM lrwxrwxrwx 1 root root  58 Jun  1 19:49 fullchain.pem -> ../../archive/mtgdeckbuilder.redirectme.net/fullchain1.pem
+@REM lrwxrwxrwx 1 root root  56 Jun  1 19:49 privkey.pem -> ../../archive/mtgdeckbuilder.redirectme.net/privkey1.pem
+
+
+@REM root@78339fc6c9e8:/var/www/html# certbot certonly --webroot --webroot-path /var/www/html --email lmolinamoreno@hotmail.com --agree-tos --no-eff-email -d mtgdeckbuilder.redirectme.net
+@REM Saving debug log to /var/log/letsencrypt/letsencrypt.log
+@REM Plugins selected: Authenticator webroot, Installer None
+@REM Account registered.
+@REM Requesting a certificate for mtgdeckbuilder.redirectme.net
+@REM Performing the following challenges:
+@REM http-01 challenge for mtgdeckbuilder.redirectme.net
+@REM Using the webroot path /var/www/html for all unmatched domains.
+@REM Waiting for verification...
+@REM Cleaning up challenges
+
+@REM IMPORTANT NOTES:
+@REM  - Congratulations! Your certificate and chain have been saved at:
+@REM        /etc/letsencrypt/live/mtgdeckbuilder.redirectme.net/fullchain.pem
+@REM    Your key file has been saved at:
+@REM        /etc/letsencrypt/live/mtgdeckbuilder.redirectme.net/privkey.pem
+@REM    Your certificate will expire on 2023-08-30. To obtain a new or
+@REM    tweaked version of this certificate in the future, simply run
+@REM    certbot again. To non-interactively renew *all* of your
+@REM    certificates, run "certbot renew"
+@REM  - If you like Certbot, please consider supporting our work by:
+
+@REM    Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+@REM    Donating to EFF:                    https://eff.org/donate-le
+
+@REM root@78339fc6c9e8:/var/www/html# 
+
+@REM #para abrir la terminal del contenedor
+@REM docker exec -it 78339fc6c9e8 bash
+
+@REM #TODO: meter rutas de los certificados en el archivo de configuracion apache del contenedor y a2enmod
