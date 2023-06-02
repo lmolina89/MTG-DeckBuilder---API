@@ -18,12 +18,14 @@ RUN docker-php-ext-install zip
 RUN docker-php-ext-install gd
 
 RUN a2enmod rewrite
+RUN a2enmod ssl
+RUN a2ensite default-ssl.conf
+RUN a2enmod headers
 
 COPY ./run.sh /bin/run.sh
 CMD ["/bin/run.sh"]
 
-RUN a2enmod ssl
-RUN a2ensite default-ssl.conf
-
 COPY ./apache-conf/apache2.conf /etc/apache2/apache2.conf
+COPY ./apache-conf/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+
 RUN service apache2 restart

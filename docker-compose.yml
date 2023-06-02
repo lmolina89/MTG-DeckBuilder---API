@@ -16,13 +16,15 @@ services:
     networks:
       - default
   www:
-    build: .
+    # build: .
+    build:
+      context: ./
+      dockerfile: Dockerfile
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./www:/var/www/html
-      - ./apache-config.conf:/etc/apache2/conf-available/my-apache.conf
     links:
       - db
     networks:
