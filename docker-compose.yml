@@ -18,7 +18,7 @@ services:
   www:
     # build: .
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
     ports:
       - "80:80"
