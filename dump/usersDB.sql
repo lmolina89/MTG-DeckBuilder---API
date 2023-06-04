@@ -1,12 +1,11 @@
-
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db
--- Tiempo de generación: 23-02-2023 a las 21:57:57
--- Versión del servidor: 8.0.32
--- Versión de PHP: 8.1.15
+-- Tiempo de generación: 04-06-2023 a las 17:49:10
+-- Versión del servidor: 8.0.33
+-- Versión de PHP: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -59,7 +58,6 @@ CREATE TABLE `deck` (
   `user_id` int NOT NULL,
   `name` varchar(50) NOT NULL,
   `numCards` int NOT NULL DEFAULT '0',
-  `userDeck` varchar(300) DEFAULT NULL,
   `deckImage` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -67,9 +65,9 @@ CREATE TABLE `deck` (
 -- Volcado de datos para la tabla `deck`
 --
 
-INSERT INTO `deck` (`id`, `user_id`, `name`, `numCards`, `userDeck`, `deckImage`) VALUES
-(7, 2, 'goblina', 0, NULL, ''),
-(8, 2, 'goblin', 0, NULL, NULL);
+INSERT INTO `deck` (`id`, `user_id`, `name`, `numCards`, `deckImage`) VALUES
+(7, 2, 'goblina', 0, ''),
+(8, 2, 'goblin', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -79,15 +77,16 @@ INSERT INTO `deck` (`id`, `user_id`, `name`, `numCards`, `userDeck`, `deckImage`
 
 CREATE TABLE `deckcard` (
   `deck_id` int NOT NULL,
-  `card_id` varchar(40) NOT NULL
+  `card_id` varchar(40) NOT NULL,
+  `numCards` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Volcado de datos para la tabla `deckcard`
 --
 
-INSERT INTO `deckcard` (`deck_id`, `card_id`) VALUES
-(8, '023b5e6f-10de-422d-8431-11f1fdeca246');
+INSERT INTO `deckcard` (`deck_id`, `card_id`, `numCards`) VALUES
+(8, '023b5e6f-10de-422d-8431-11f1fdeca246', 0);
 
 -- --------------------------------------------------------
 
@@ -100,18 +99,18 @@ CREATE TABLE `users` (
   `email` varchar(60) NOT NULL,
   `passwd` varchar(240) NOT NULL,
   `nick` varchar(40) NOT NULL,
-  `imageUri` varchar(300) DEFAULT NULL,
   `token` varchar(240) DEFAULT NULL,
-  `deckList` longtext
+  `admin` tinyint(1) NOT NULL DEFAULT '0',
+  `active` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='users-table';
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `passwd`, `nick`, `imageUri`, `token`, `deckList`) VALUES
-(1, 'admin@admin.com', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', 'admin', NULL, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzcxNzI5NjgsImRhdGEiOnsiaWQiOiIxIiwiZW1haWwiOm51bGx9fQ.urEK9Hq6u4pz9q2Tuulcm1gWIfE2pDpkQDB5WDEbkFc', ''),
-(2, 'lmolinamoreno@hotmail.com', '5663827deac9d358dc673eff746de182f10255a43b2d553d94d2d60869c25ff3', 'dummyplug_01', NULL, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzcxODgwNTAsImRhdGEiOnsiaWQiOiIyIiwiZW1haWwiOiJsbW9saW5hbW9yZW5vQGhvdG1haWwuY29tIn19.EKnPipYL2yOzK5SLbDiqrDD6TU-yHit8YyBqlcsSbfE', NULL);
+INSERT INTO `users` (`id`, `email`, `passwd`, `nick`, `token`, `admin`, `active`) VALUES
+(1, 'admin@admin.com', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', 'admin', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzcxNzI5NjgsImRhdGEiOnsiaWQiOiIxIiwiZW1haWwiOm51bGx9fQ.urEK9Hq6u4pz9q2Tuulcm1gWIfE2pDpkQDB5WDEbkFc', 1, 1),
+(2, 'lmolinamoreno@hotmail.com', '5663827deac9d358dc673eff746de182f10255a43b2d553d94d2d60869c25ff3', 'dummyplug_01', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2ODU4OTk3NzQsImRhdGEiOnsiaWQiOiIyIiwiZW1haWwiOiJsbW9saW5hbW9yZW5vQGhvdG1haWwuY29tIn19.9lPoMD5sURXpe7CnEm12ZMJbQxoiG-FrOzRFWBrwvJs', 0, 1);
 
 --
 -- Índices para tablas volcadas
@@ -180,10 +179,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-
-
--- SELECT c.*
--- FROM card c
--- INNER JOIN deckcard dc ON c.id = dc.card_id
--- WHERE dc.deck_id = 'your_deck_id';
