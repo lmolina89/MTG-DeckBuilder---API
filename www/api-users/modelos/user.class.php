@@ -165,6 +165,7 @@ class User extends Database
             //ahora debemos encriptar la password
             $password_encriptada = hash('sha256', $params['passwd']);
             $params['passwd'] = $password_encriptada;
+            // echo $params['passwd'];exit;
             //se llama al padre con el método inserDB.
             return parent::insertDB($this->table, $params);
         }
