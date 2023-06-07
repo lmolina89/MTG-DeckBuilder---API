@@ -108,6 +108,41 @@ class Authentication extends AuthModel
 
 
 
+	public function verifyAdmin($token)
+	{
+		try {
+			$data = JWT::decode($token, $this->key, array('HS256'));
+			//echo "paso";
+			$user = parent::getUserById($data->data->id)[0];
+			$this->idUser = $data->data->id;
+			// print_r($user) ; exit;
+
+			if($user['admin'] == 1 && $user['active'] == 1){
+				$response = array(
+					'result' => 'ok',
+					'admin' => true
+				);
+				Response::result(200, $response);
+				exit;
+			}else{
+				$response = array(
+					'result' => 'error',
+					'admin' => false
+				);
+				Response::result(403, $response);
+				exit;
+			}
+
+			
+		} catch (\Throwable $th) {
+			$response = array(
+				'result' => 'error',
+				'details' => 'Error al verificar token'
+			);
+			Response::result(403, $response);
+			exit;
+		}
+	}
 
 
 	/**
@@ -139,7 +174,7 @@ class Authentication extends AuthModel
 
 		if (!isset($_SERVER['HTTP_API_KEY'])) {
 
-			echo "No existe HTTP_API_KEY";
+			// echo "No existe HTTP_API_KEY";
 			$response = array(
 				'result' => 'error',
 				'details' => 'Usted no tiene los permisos para esta solicitud'
