@@ -31,7 +31,6 @@ COPY ./mtgdeckbuilderapi.redirectme.net/fullchain.pem /etc/letsencrypt/live/mtgd
 COPY ./apache-conf/apache2.conf /etc/apache2/apache2.conf
 COPY ./apache-conf/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 
-RUN apt update && apt install -y nano
 
 
 

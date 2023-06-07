@@ -27,8 +27,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Desde el token, se obtiene el nombre de usuario (nick).  
     $nick = $auth->getNick($token);
 
+    $isAdmin;
+    if ($auth->isAdmin($token) == 1) {
+        $isAdmin = true;
+    } else {
+        $isAdmin = false;
+    }
+    
+    // $isAdmin = $auth->isAdmin($token) ? true: false
+    
+
     // Se crea un array con los datos a devolver al usuario (resultado, token y nick).  								  	    	    	    	    	    	    	    	    	    
-    $response = ['result' => 'ok', 'token' => $token, 'user_nick' => $nick];
+    $response = [
+        'result' => 'ok', 
+        'token' => $token, 
+        'user_nick' => $nick,
+        'admin'=> $isAdmin
+    ];
 
     // Se devuelve el token correctamente al usuario. 
     Response::result(201, $response);

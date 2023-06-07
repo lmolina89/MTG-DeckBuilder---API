@@ -17,11 +17,10 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+?)/?$ index.php?url=$1 [L,QSA]
 
 <IfModule mod_headers.c>
-    # Header always set Access-Control-Allow-Origin "*"
-        Header append Access-Control-Allow-Origin "http://localhost:4200"
-    Header always set Access-Control-Allow-Methods "POST, GET, PUT, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Origin "*"
+    # Header append Access-Control-Allow-Origin "http://localhost:4200"
+    # Header append Access-Control-Allow-Origin "https://portal-admin-mtg-deckbuilder.000webhostapp.com"
+    Header always set Access-Control-Allow-Methods "POST, GET, PUT, DELETE"
     Header always set Access-Control-Allow-Headers "Content-Type"
     Header append Access-Control-Allow-Headers "api-key"
 </IfModule>
-
-    # Header append Access-Control-Allow-Origin "https://portal-admin-mtg-deckbuilder.000webhostapp.com"
