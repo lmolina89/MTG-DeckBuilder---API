@@ -14,7 +14,7 @@ class User extends Database
         'nick',
         'email',
         'imageUri',
-        'deckList'
+
     );
 
 
@@ -24,7 +24,9 @@ class User extends Database
         'passwd',
         'nick',
         'imageUri',
-        'deckList'
+        'deckList',
+        'active',
+        'admin'
     );
 
     //parámetros permitidos para la actualización.
@@ -33,7 +35,9 @@ class User extends Database
         'passwd',
         'nick',
         'imageUri',
-        'deckList'
+        'deckList',
+        'admin',
+        'active'
     );
 
 
@@ -93,7 +97,7 @@ class User extends Database
         if (!isset($data['passwd']) || empty($data['passwd'])) {
             $response = array(
                 'result' => 'error',
-                'details' => 'El password es obligatoria'
+                'details' => 'El password es obligatorio'
             );
 
             Response::result(400, $response);
@@ -236,8 +240,9 @@ class User extends Database
      * Si todo ha ido bien, retorna de la función a user y éste acaba.
      */
     public
-    function delete($id)
-    {
+        function delete(
+        $id
+    ) {
         $affected_rows = parent::deleteDB($this->table, $id);
 
         if ($affected_rows == 0) {

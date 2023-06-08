@@ -117,7 +117,7 @@ class Database
             }
         }
 
-//        echo $query;exit;
+        //        echo $query;exit;
         $results = $this->connection->query($query);
         $resultArray = array();
 
@@ -146,7 +146,7 @@ class Database
         $query_card = "INSERT INTO $table_cards (" . $fields . ') VALUES (' . $values . ')';
         $exist = false;
 
-//        print_r($cards_db);exit;
+        //        print_r($cards_db);exit;
         foreach ($cards_db as $card_db) {
             if ($data['id'] == $card_db['id']) {
                 $exist = true;
@@ -157,10 +157,10 @@ class Database
         }
 
 
-//        echo "deck_id -> ".$deck_id."\n";
+        //        echo "deck_id -> ".$deck_id."\n";
 //        echo $query;exit;
         $this->connection->query($query);
-//        echo $this->connection->affected_rows;
+        //        echo $this->connection->affected_rows;
 //        exit;
 
         if ($this->connection->affected_rows != 1) {
@@ -173,7 +173,7 @@ class Database
             exit;
         }
         $this->connection->query($query_numCards);
-//        echo $this->connection->affected_rows;
+        //        echo $this->connection->affected_rows;
         return true;
     }
 
@@ -204,7 +204,7 @@ class Database
         $query = "INSERT INTO $table (" . $fields . ') VALUES (' . $values . ')';
         // echo $query;exit;
         $this->connection->query($query);
-//        print_r($this->connection);exit;
+        //        print_r($this->connection);exit;
         return $this->connection->insert_id;
     }
 
@@ -224,6 +224,26 @@ class Database
     public function updateDB($table, $id, $data)
     {
         $query = "UPDATE $table SET ";
+
+        if (isset($data['active'])) {
+            if ($data['active'] == true) {
+                $data['active'] = 1;
+            } else {
+                $data['active'] = 0;
+            }
+        }
+
+        if (isset($data['admin'])) {
+            if ($data['admin'] == true) {
+                $data['admin'] = 1;
+            } else {
+                $data['admin'] = 0;
+            }
+        }
+
+
+        // print_r($data);
+        // exit;
         foreach ($data as $key => $value) {
             $query .= "$key = '$value'";
             /*
@@ -236,7 +256,7 @@ class Database
 
         $query .= ' WHERE id = ' . $id;
 
-        //echo $query; exit;
+        // echo $query; exit;
         $this->connection->query($query);
 
         if (!$this->connection->affected_rows) {
@@ -253,11 +273,11 @@ class Database
         $query_down = "UPDATE $table_dc SET numCards = GREATEST(numCards - 1, 1) WHERE deck_id = " . $data['deck_id'] . " AND card_id = '" . $data['card_id'] . "'";
 
         if ($data['action'] == "up") {
-//            echo $query_up;
+            //            echo $query_up;
 //            exit;
             $this->connection->query($query_up);
         } elseif ($data['action'] == "down") {
-//            echo $query_down;
+            //            echo $query_down;
 //            exit;
             $this->connection->query($query_down);
         } else {
@@ -273,7 +293,7 @@ class Database
             return false;
         }
         $this->connection->query($query_numCards);
-//        echo $this->connection->affected_rows;
+        //        echo $this->connection->affected_rows;
         return true;
     }
 
@@ -283,11 +303,11 @@ class Database
         $card_id = $data['card_id'];
         $query = "DELETE FROM $table_dc WHERE deck_id = $deck_id AND card_id = '" . $card_id . "'";
         $this->connection->query($query);
-//         echo $query; exit;
+        //         echo $query; exit;
         if (!$this->connection->affected_rows) {
             return 0;
         }
-//        $error = mysqli_error($this->connection);
+        //        $error = mysqli_error($this->connection);
 //        echo $error; exit;
         return $this->connection->affected_rows;
     }
@@ -295,13 +315,13 @@ class Database
     public function deleteDB($table, $id)
     {
         $query = "DELETE FROM " . $table . " WHERE id = " . $id;
-//        echo $query;
+        //        echo $query;
         if ($table == 'deckcard') {
             $query = "DELETE FROM $table WHERE deck_id = $id";
         }
-//        echo $query;
+        //        echo $query;
         $this->connection->query($query);
-//        echo $this->connection->affected_rows;
+        //        echo $this->connection->affected_rows;
         if (!$this->connection->affected_rows) {
             return 0;
         }
