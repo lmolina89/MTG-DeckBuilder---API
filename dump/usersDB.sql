@@ -33,7 +33,7 @@ CREATE TABLE `card` (
   `manacost` varchar(40) DEFAULT NULL,
   `cmc` int DEFAULT NULL,
   `atributes` varchar(10) DEFAULT NULL,
-  `text` varchar(255) DEFAULT NULL,
+  `text` varchar(500) DEFAULT NULL,
   `artist` varchar(50) DEFAULT NULL,
   `expansion` varchar(50) DEFAULT NULL,
   `imageUri` varchar(300) DEFAULT NULL,

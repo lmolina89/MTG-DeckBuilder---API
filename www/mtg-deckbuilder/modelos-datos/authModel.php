@@ -24,7 +24,7 @@ class AuthModel
 	public function login($email, $password)
 	{
 		$query = "SELECT id, nick, email FROM users WHERE email = '$email' AND passwd = '$password'";
-
+// echo $query;exit;
 		$results = $this->connection->query($query);
 
 		$resultArray = array();

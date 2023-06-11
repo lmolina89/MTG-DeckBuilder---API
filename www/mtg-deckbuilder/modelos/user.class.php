@@ -24,7 +24,6 @@ class User extends Database
         'passwd',
         'nick',
         'imageUri',
-        'deckList',
         'active',
         'admin'
     );
@@ -35,7 +34,6 @@ class User extends Database
         'passwd',
         'nick',
         'imageUri',
-        'deckList',
         'admin',
         'active'
     );
@@ -165,7 +163,6 @@ class User extends Database
         //ejecutará la función que valida los parámetros pasados.
 
         if ($this->validateInsert($params)) {
-
             //ahora debemos encriptar la password
             $password_encriptada = hash('sha256', $params['passwd']);
             $params['passwd'] = $password_encriptada;

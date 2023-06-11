@@ -2,7 +2,16 @@
 require_once '../respuestas/response.php';
 require_once '../modelos/user.class.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Headers: Content-Type');
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+
 	$user = new User();
 
 	$params = json_decode(file_get_contents('php://input'), true);

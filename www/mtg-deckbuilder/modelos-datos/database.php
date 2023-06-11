@@ -141,7 +141,7 @@ class Database
         $values = '"';
         $values .= implode('","', array_values($data));
         $values .= '"';
-        $query_numCards = "UPDATE deck AS d SET d.numCards = (SELECT SUM(dc.numCards) FROM deckcard AS dc WHERE dc.deck_id = d.id)";
+        $query_numCards = "UPDATE deck AS d JOIN ( SELECT deck_id, SUM(numCards) AS totalCards FROM deckcard GROUP BY deck_id) AS dc ON d.id = dc.deck_id SET d.numCards = dc.totalCards";
         $query = "INSERT INTO $table_keys (deck_id,card_id,numCards) VALUES ($deck_id," . "'" . $card_id . "',1)";
         $query_card = "INSERT INTO $table_cards (" . $fields . ') VALUES (' . $values . ')';
         $exist = false;
@@ -171,7 +171,7 @@ class Database
             );
             Response::result(400, $response);
             exit;
-        }
+        }        
         $this->connection->query($query_numCards);
         //        echo $this->connection->affected_rows;
         return true;
@@ -268,7 +268,7 @@ class Database
 
     public function updateDBJoin($table_dc, $table_c, $data)
     {
-        $query_numCards = "UPDATE deck AS d SET d.numCards = (SELECT SUM(dc.numCards) FROM deckcard AS dc WHERE dc.deck_id = d.id)";
+        $query_numCards = "UPDATE deck AS d JOIN ( SELECT deck_id, SUM(numCards) AS totalCards FROM deckcard GROUP BY deck_id) AS dc ON d.id = dc.deck_id SET d.numCards = dc.totalCards";
         $query_up = "UPDATE $table_dc SET numCards = LEAST(numCards + 1, 4) WHERE deck_id = " . $data['deck_id'] . " AND card_id = '" . $data['card_id'] . "'";
         $query_down = "UPDATE $table_dc SET numCards = GREATEST(numCards - 1, 1) WHERE deck_id = " . $data['deck_id'] . " AND card_id = '" . $data['card_id'] . "'";
 
