@@ -11,7 +11,7 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - ./dump:/docker-entrypoint-initdb.d
-      - ./conf:/etc/mysql/conf.d
+      # - ./conf:/etc/mysql/conf.d
       - persistent:/var/lib/mysql
     networks:
       - default
