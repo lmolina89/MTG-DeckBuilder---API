@@ -3,22 +3,17 @@ require_once '../respuestas/response.php';
 require_once '../modelos/deck.class.php';
 require_once '../modelos/auth.class.php';
 
-$auth = new Authentication();  //***** CAPA DE AUTHENTICATION  *****/
-//Compara que el token sea el correcto y que la decodificación con clave privada
-//sea la correcta.
-$auth->verify();  /* VERIFICAMOS LA AUTENTICACIÓN.  */
-//hasta aquí, el token está perfectamente verificada.
-$deck = new deck();  //creamos un objeto de la clase deck.
+$auth = new Authentication();
+
+$auth->verify();
+
+$deck = new deck();
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        $params = $_GET; //leemos los parámetros por URL
-        /*
-        Dentro de la clase deck, están todas las validaciones. El método get recibe
-        los parámetros y devuelve un array con los datos en forma de array.
-        */
+        $params = $_GET;
+
         if (isset($_GET['id']) && !empty($_GET['id'])) {
-            // echo "Pasamos id_usuario es ".$_GET['id_usuario']." y el id del token es ".$auth->getIdUser();
             if ($_GET['id'] != $auth->getIdUser()) {
                 $response = array(
                     'result' => 'error',
@@ -28,13 +23,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 exit;
             }
         } else {
-            //hay que añadir a $params el id del usuario.
             $params['user_id'] = $auth->getIdUser();
         }
 
 
         $decks = $deck->get($params);
-        //$auth->insertarLog('lleva a solicitud de decks');
         $url_raiz_img = "http://" . $_SERVER['HTTP_HOST'] . "/api-users/public/img";
         for ($i = 0; $i < count($decks); $i++) {
             if (!empty($decks[$i]['deckImage']))
@@ -45,20 +38,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
             'result' => 'ok',
             'decks' => $decks
         );
-        // $auth->insertarLog('devuelve decks');
         Response::result(200, $response);
         break;
 
     case 'POST':
-        /*
-        Los parámetros del body, los recupera a partir de la función file_get_contents('php://input')
-        Decodificamos ese json a partir de json_decode y lo transforma a un array asociativo dentro de params.
-        */
-        $params = json_decode(file_get_contents('php://input'), true);  //supongo que se envía por @body
 
-        /*
-        Comprueba si existen parámetros. Si no existe, devuelve la respuesta de error 400.
-        */
+        $params = json_decode(file_get_contents('php://input'), true); //supongo que se envía por @body
+
         if (!isset($params)) {
             $response = array(
                 'result' => 'error',
@@ -69,14 +55,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
             exit;
         }
 
-
         $params['user_id'] = $auth->getIdUser();
-
-        //aquí insertamos el nuevo deck a partir de nuestro objeto deck.
 
         $params_deck_id["deck_id"] = $deck->insert($params);
         $insert_id_deck = $params_deck_id['deck_id'];
-//        echo $params_deck_id["deck_id"];
 
         $response = array(
             'result' => 'ok',
@@ -87,22 +69,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
         Response::result(201, $response);
         break;
 
-    /**
-     * Los campos que queremos editar, también van el el body, pero el id va en la URL
-     * Decodifica el json recibido como en el post y comprobamos si tenemos un id. En caso
-     * contrario, hay un error porque no sabemos qué registro hay que actualizar.
-     *
-     * Llamamos al método update con el id y los parametros a modificar.
-     * Al finalizar, se arma la respuesta ok.
-     */
-
     case 'PUT':
-        //volvemos a pasar nuestro json a un arry asociativo
         $params = json_decode(file_get_contents('php://input'), true);
 
-        /*
-        Es obligatorio que al editar un deck, exista el parámetro id y valor.
-        */
         if (!isset($params) || !isset($_GET['id']) || empty($_GET['id'])) {
             $response = array(
                 'result' => 'error',
@@ -113,13 +82,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
             exit;
         }
 
-        //actualizamos por id.
         $deck->update($_GET['id'], $params);
-        /**
-         * toca actualizar el token del deck, ya que modificó obligatoriamente
-         * el campo email.
-         */
-        // $auth->modifyToken($_GET['id'], $params["email"]);
+
         $response = array(
             'result' => 'ok',
             'details' => 'Se ha actualizado correctamente'
@@ -129,19 +93,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
         break;
 
-    /**
-     * Comprueba que le hemos pasado por url el id y que no esté vacío. En cuyo caso, armamos la
-     * respuesta de error y nos salimos. Llamamos al método delete pasándole el id y éste
-     * eliminará dicho registro. Por último arma la respuesta ok.
-     */
-
     case 'DELETE':
 
-        /*
-        Es obligatorio el id por GET
-        */
-        // $params = $_REQUEST;
-        // print_r($_GET);exit;
         if (!isset($_GET['deck_id']) || empty($_GET['deck_id'])) {
             $response = array(
                 'result' => 'error',
@@ -151,7 +104,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
             Response::result(400, $response);
             exit;
         }
-        //eliminamos al deck, cuya id pasamos.
         $deck->delete($_GET['deck_id']);
 
         $response = array(
@@ -169,7 +121,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         );
 
         Response::result(404, $response);
-
         break;
 }
 ?>

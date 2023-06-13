@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = json_decode(file_get_contents('php://input'), true);
     //se genera el nuevo token 
     $token = $auth->signIn($user);
-    
+
     //se obtiene el nick a partir del token  
     $nick = $auth->getNick($token);
     //parsea la propiedad admin de integer a boolean

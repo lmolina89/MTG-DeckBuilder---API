@@ -41,15 +41,6 @@ CREATE TABLE `card` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Volcado de datos para la tabla `card`
---
-
-INSERT INTO `card` (`id`, `name`, `manacost`, `cmc`, `atributes`, `text`, `artist`, `expansion`, `imageUri`, `numCopies`) VALUES
-('023b5e6f-10de-422d-8431-11f1fdeca246', 'Abu Jafar', '{W}', 1, '0/1', 'When Abu Jafar dies, destroy all creatures blocking or blocked by it. They cant be regenerated', 'Ken Meyer, Jr.', 'Chronicles', 'https://cards.scryfall.io/normal/front/d/2/d25ff6aa-a01d-49f2-926f-8f5457143b5c.jpg?1583542840', 0);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `deck`
 --
 
@@ -62,16 +53,6 @@ CREATE TABLE `deck` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Volcado de datos para la tabla `deck`
---
-
-INSERT INTO `deck` (`id`, `user_id`, `name`, `numCards`, `deckImage`) VALUES
-(7, 2, 'goblina', 0, ''),
-(8, 2, 'goblin', 0, NULL);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `deckcard`
 --
 
@@ -81,14 +62,6 @@ CREATE TABLE `deckcard` (
   `numCards` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Volcado de datos para la tabla `deckcard`
---
-
-INSERT INTO `deckcard` (`deck_id`, `card_id`, `numCards`) VALUES
-(8, '023b5e6f-10de-422d-8431-11f1fdeca246', 0);
-
--- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `users`
@@ -158,9 +131,6 @@ ALTER TABLE `deck`
 ALTER TABLE `users`
   MODIFY `id` int NOT NULL AUTO_INCREMENT COMMENT 'primary-key', AUTO_INCREMENT=3;
 
---
--- Restricciones para tablas volcadas
---
 
 --
 -- Filtros para la tabla `deck`

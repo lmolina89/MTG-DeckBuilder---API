@@ -33,9 +33,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'POST':
         $params = json_decode(file_get_contents('php://input'), true);
-//        print_r($_GET);
-//        print_r($_SERVER);
-//        print_r($params);exit;
 
         if (!isset($_GET['deck_id']) && empty($_GET['deck_id'])) {
             $response = array(
@@ -52,8 +49,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 'result' => 'ok',
                 'details' => 'insertado correctamente'
             );
-//            echo "Fin del metodo POST dentro de card.php";
-//            exit;
+
             Response::result(200, $response);
         }
         break;
@@ -72,22 +68,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
         }
 
         $params['deck_id'] = $_GET['deck_id'];
-//        print_r($params);exit;
+
         if ($card->update($params)) {
             $response = array(
                 'result' => 'ok',
                 'details' => 'Numero de cartas modificado correctamente'
             );
-//            echo "Fin del metodo POST dentro de card.php";
-//            exit;
+
             Response::result(200, $response);
         }
         break;
 
     case 'DELETE':
-//        $params = json_decode(file_get_contents('php://input'), true);
 
-        if(!isset($_GET['deck_id']) || empty($_GET['deck_id'])){
+        if (!isset($_GET['deck_id']) || empty($_GET['deck_id'])) {
             $response = array(
                 'result' => 'error',
                 'details' => 'Falta el dato deck_id'
@@ -96,7 +90,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             exit;
         }
 
-        if(!isset($_GET['card_id']) || empty($_GET['card_id'])){
+        if (!isset($_GET['card_id']) || empty($_GET['card_id'])) {
             $response = array(
                 'result' => 'error',
                 'details' => 'Falta el dato card_id'
@@ -105,16 +99,16 @@ switch ($_SERVER['REQUEST_METHOD']) {
             exit;
         }
         $params = $_GET;
-//        $params['deck_id'] = $_GET['deck_id'];
+
 
         $card->delete($params);
-//        echo "hasta aqui hemos llegado";exit;
+
         $response = array(
             'result' => 'ok',
             'details' => 'carta eliminada correctamente'
         );
 
-        Response::result(200,$response);
+        Response::result(200, $response);
         break;
-    }
+}
 ?>

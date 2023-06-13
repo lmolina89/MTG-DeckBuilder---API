@@ -271,17 +271,17 @@ class JWT
                     'OpenSSL error: ' . \openssl_error_string()
                 );
             case 'sodium_crypto':
-              if (!function_exists('sodium_crypto_sign_verify_detached')) {
-                  throw new DomainException('libsodium is not available');
-              }
-              try {
-                  // The last non-empty line is used as the key.
-                  $lines = array_filter(explode("\n", $key));
-                  $key = base64_decode(end($lines));
-                  return sodium_crypto_sign_verify_detached($signature, $msg, $key);
-              } catch (Exception $e) {
-                  throw new DomainException($e->getMessage(), 0, $e);
-              }
+                if (!function_exists('sodium_crypto_sign_verify_detached')) {
+                    throw new DomainException('libsodium is not available');
+                }
+                try {
+                    // The last non-empty line is used as the key.
+                    $lines = array_filter(explode("\n", $key));
+                    $key = base64_decode(end($lines));
+                    return sodium_crypto_sign_verify_detached($signature, $msg, $key);
+                } catch (Exception $e) {
+                    throw new DomainException($e->getMessage(), 0, $e);
+                }
             case 'hash_hmac':
             default:
                 $hash = \hash_hmac($algorithm, $msg, $key, true);
@@ -323,7 +323,7 @@ class JWT
              *them to strings) before decoding, hence the preg_replace() call.
              */
             $max_int_length = \strlen((string) PHP_INT_MAX) - 1;
-            $json_without_bigints = \preg_replace('/:\s*(-?\d{'.$max_int_length.',})/', ': "$1"', $input);
+            $json_without_bigints = \preg_replace('/:\s*(-?\d{' . $max_int_length . ',})/', ': "$1"', $input);
             $obj = \json_decode($json_without_bigints);
         }
 

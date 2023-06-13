@@ -3,17 +3,14 @@ require_once '../respuestas/response.php';
 require_once '../modelos/user.class.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: POST');
-    header('Access-Control-Allow-Headers: Content-Type');
-    exit;
+	header('Access-Control-Allow-Origin: *');
+	header('Access-Control-Allow-Methods: POST');
+	header('Access-Control-Allow-Headers: Content-Type');
+	exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-
 	$user = new User();
-
 	$params = json_decode(file_get_contents('php://input'), true);
 
 	if (!isset($params)) {
@@ -36,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			'insert_id' => $insert_id
 		)
 	);
-} else { //Intentamos registrarnos sin el post
+} else {
 	Response::result(
 		404,
 		array(

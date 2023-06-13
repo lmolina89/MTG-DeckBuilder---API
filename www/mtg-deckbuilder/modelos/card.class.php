@@ -34,7 +34,6 @@ class Card extends Database
 
     private function validateInsert($data)
     {
-
         if (!isset($data['id']) || empty($data['id'])) {
             $response = array(
                 'result' => 'error',
@@ -44,8 +43,6 @@ class Card extends Database
             Response::result(400, $response);
             exit;
         }
-
-
         return true;
     }
 
@@ -56,11 +53,9 @@ class Card extends Database
                 'result' => 'error',
                 'details' => 'El campo deck_id es obligatorio'
             );
-
             Response::result(400, $response);
             exit;
         }
-
         return true;
     }
 
@@ -89,13 +84,11 @@ class Card extends Database
             );
             Response::result(400, $response);
         }
-
         return true;
     }
 
     public function get($params)
     {
-
         foreach ($params as $key => $param) {
             if (!in_array($key, $this->allowedConditions_get)) {
                 unset($params[$key]);
@@ -107,7 +100,6 @@ class Card extends Database
                 exit;
             }
         }
-
         return parent::getDBJoin($this->table_dc, $this->table_c, $params);
     }
 
@@ -120,12 +112,10 @@ class Card extends Database
                     'result' => 'error',
                     'details' => 'Error en la solicitud. Parametro no permitido al insertar'
                 );
-
                 Response::result(400, $response);
                 exit;
             }
         }
-//        echo "Dentro de insert de card.class.php\n";
         if ($this->validateInsert($params)) {
             return parent::insertDBJoin($this->table_dc, $this->table_c, $params);
         }
@@ -144,6 +134,7 @@ class Card extends Database
                 exit;
             }
         }
+
         if ($this->validateUpdate($params)) {
             if (!parent::updateDBJoin($this->table_dc, $this->table_c, $params)) {
                 $response = array(
@@ -160,8 +151,6 @@ class Card extends Database
 
     public function delete($data)
     {
-//        print_r($data);exit;
-
         $affected_rows = parent::deleteDBJoin($this->table_dc, $data);
 
         if ($affected_rows == 0) {
@@ -172,17 +161,6 @@ class Card extends Database
             Response::result(200, $response);
             exit;
         }
-
-
-
     }
-
-
-
-// $affected_rows = parent::deleteDB($);
-// $affected_rows = parent::deleteDB();
-
-
 }
-
 ?>
