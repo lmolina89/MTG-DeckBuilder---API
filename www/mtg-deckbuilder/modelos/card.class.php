@@ -4,9 +4,11 @@ require_once '../modelos-datos/database.php';
 
 class Card extends Database
 {
+    //nombre de las tablas
     private $table_dc = 'deckcard';
     private $table_c = 'card';
 
+    //parametros validos para GET
     private $allowedConditions_get = array(
         'deck_id'
     );
@@ -32,6 +34,7 @@ class Card extends Database
         'action'
     );
 
+    //validar parametros de insercion
     private function validateInsert($data)
     {
         if (!isset($data['id']) || empty($data['id'])) {
@@ -46,19 +49,7 @@ class Card extends Database
         return true;
     }
 
-    private function validateInsertDeckCard()
-    {
-        if (!isset($data['deck_id']) || empty($data['deck_id'])) {
-            $response = array(
-                'result' => 'error',
-                'details' => 'El campo deck_id es obligatorio'
-            );
-            Response::result(400, $response);
-            exit;
-        }
-        return true;
-    }
-
+    //valida los parametros de actualizacion
     private function validateUpdate($data)
     {
         if (!isset($data['card_id']) || empty($data['card_id'])) {
@@ -87,6 +78,7 @@ class Card extends Database
         return true;
     }
 
+    //busca todas las cartas de un mazo
     public function get($params)
     {
         foreach ($params as $key => $param) {
@@ -103,6 +95,7 @@ class Card extends Database
         return parent::getDBJoin($this->table_dc, $this->table_c, $params);
     }
 
+    //inserta una carta en el mazo
     public function insert($params)
     {
         foreach ($params as $key => $param) {
@@ -121,6 +114,7 @@ class Card extends Database
         }
     }
 
+    //actualiza el numero de cartas de un mazo
     public function update($params)
     {
         foreach ($params as $key => $param) {
@@ -148,7 +142,7 @@ class Card extends Database
         return true;
     }
 
-
+    //elimina una carta de un mazo
     public function delete($data)
     {
         $affected_rows = parent::deleteDBJoin($this->table_dc, $data);

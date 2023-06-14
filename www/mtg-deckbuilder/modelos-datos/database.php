@@ -2,8 +2,7 @@
 class Database
 {
     private $connection; //guardará la conexión
-    private $results_page = 50; //número de resultados por página.
-
+//constructor que inicializa la conexion con la base de datos
     public function __construct()
     {
         $this->connection = new mysqli('db', 'root', 'example', 'usersDB', '3306');
@@ -13,15 +12,10 @@ class Database
         }
     }
 
+    //hace una consulta de todas las cartas de un mazo que tienen la misma id que las de la tabla deckCard
     public function getDBJoin($table_keys, $table_card, $extra = null)
     {
-        $page = 0;
         $query = "SELECT c.*, dc.numCards as num_cards FROM $table_card c INNER JOIN $table_keys dc ON c.id = dc.card_id";
-
-        if (isset($extra['page'])) {
-            $page = $extra['page'];
-            unset($extra['page']);
-        }
 
         if ($extra != null) {
             $query .= ' WHERE dc.';
@@ -42,6 +36,7 @@ class Database
         return $resultArray;
     }
 
+    //hace una consulta sql de GET
     public function getDB($table, $extra = null)
     {
         $query = "SELECT * FROM $table";
@@ -65,6 +60,7 @@ class Database
         return $resultArray;
     }
 
+    //inserta cartas en la tabla cards y despues asocia su ID con la ID de mazo en la tabla deckCard
     public function insertDBJoin($table_keys, $table_cards, $data)
     {
         $cards_db = $this->getDB($table_cards);
@@ -104,6 +100,7 @@ class Database
         return true;
     }
 
+    //inserta mazos y usuarios en la base de datos
     public function insertDB($table, $data)
     {
         $fields = implode(',', array_keys($data));
@@ -115,6 +112,7 @@ class Database
         return $this->connection->insert_id;
     }
 
+    //actualiza mazos y usuarios de la base de datos
     public function updateDB($table, $id, $data)
     {
         $query = "UPDATE $table SET ";
@@ -153,6 +151,7 @@ class Database
         return $this->connection->affected_rows;
     }
 
+    //actualiza las cartas de un mazo de la base de datos en la tabla deckCard
     public function updateDBJoin($table_dc, $table_c, $data)
     {
         $query_numCards = "UPDATE deck AS d JOIN ( SELECT deck_id, SUM(numCards) AS totalCards FROM deckcard GROUP BY deck_id) AS dc ON d.id = dc.deck_id SET d.numCards = dc.totalCards";
@@ -180,6 +179,7 @@ class Database
         return true;
     }
 
+    //elimina una carta de la tabla deckCard
     public function deleteDBJoin($table_dc, $data)
     {
         $deck_id = $data['deck_id'];
@@ -192,6 +192,7 @@ class Database
         return $this->connection->affected_rows;
     }
 
+    //elimina usuarios, mazos y cartas de sus respectivas tablas
     public function deleteDB($table, $id)
     {
         $query = "DELETE FROM " . $table . " WHERE id = " . $id;

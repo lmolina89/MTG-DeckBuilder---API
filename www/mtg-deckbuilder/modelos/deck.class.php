@@ -7,11 +7,13 @@ class Deck extends Database
     private $table = 'deck'; //nombre de la tabla
     private $table_dc = 'deckcard';
 
+    //parametros validos para GET
     private $allowedConditions_get = array(
         'user_id',
         'deck_id'
     );
 
+    //parametros validos para POST
     private $allowedConditions_insert = array(
         'id',
         'user_id',
@@ -19,13 +21,14 @@ class Deck extends Database
         'deckImage'
     );
 
+    //parametros validos para PUT
     private $allowedConditions_update = array(
         'id',
         'name',
         'deckImage'
     );
 
-
+    //validar insercion de mazos
     private function validateInsert($data)
     {
 
@@ -34,7 +37,6 @@ class Deck extends Database
                 'result' => 'error',
                 'details' => 'El campo nombre es obligatorio'
             );
-
             Response::result(400, $response);
             exit;
         }
@@ -54,7 +56,7 @@ class Deck extends Database
         return true;
     }
 
-
+    //validar actualizacion de mazos
     private function validateUpdate($data)
     {
         if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -82,6 +84,7 @@ class Deck extends Database
         return true;
     }
 
+    //validar buscar mazos de usuario
     public function get($params)
     {
         foreach ($params as $key => $param) {
@@ -99,6 +102,7 @@ class Deck extends Database
         return $decks;
     }
 
+    //insertar un mazo en la lista de mazos de usuario
     public function insert($params)
     {
         foreach ($params as $key => $param) {
@@ -114,7 +118,6 @@ class Deck extends Database
         }
 
         if ($this->validateInsert($params)) {
-
             if (isset($params['deckImage'])) {
                 $img_array = explode(';base64,', $params['deckImage']);
                 $extension = strtoupper(explode('/', $img_array[0])[1]);
@@ -128,6 +131,7 @@ class Deck extends Database
         }
     }
 
+    //actualizar un mazo de usuario
     public function update($id, $params)
     {
         foreach ($params as $key => $parm) {
@@ -179,6 +183,7 @@ class Deck extends Database
         }
     }
 
+    //eliminar el mazo de un usuario
     public function delete($id)
     {
         //Necesito eliminar su imagen, en el supuesto de que exista.

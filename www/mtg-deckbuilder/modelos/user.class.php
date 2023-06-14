@@ -4,14 +4,17 @@ require_once '../modelos-datos/database.php';
 
 class User extends Database
 {
+    //tablas
     private $table = 'users'; //nombre de la tabla
 
+    //parametros validos para GET
     private $allowedConditions_get = array(
         'id',
         'nick',
         'email',
         'imageUri'
     );
+
     //parámetros permitidos para la inserción. Al hacer el POST
     private $allowedConditions_insert = array(
         'email',
@@ -21,7 +24,8 @@ class User extends Database
         'active',
         'admin'
     );
-    //parámetros permitidos para la actualización.
+
+    //parámetros permitidos para PUT.
     private $allowedConditions_update = array(
         'email',
         'passwd',
@@ -31,6 +35,7 @@ class User extends Database
         'active'
     );
 
+    //validar insertar usuario
     private function validateInsert($data)
     {
         if (!isset($data['email']) || empty($data['email'])) {
@@ -62,7 +67,7 @@ class User extends Database
         return true;
     }
 
-
+    //validar actualizar usuario
     private function validateUpdate($data)
     {
         if (!isset($data['email']) || empty($data['email'])) {
@@ -85,6 +90,7 @@ class User extends Database
         return true;
     }
 
+    //busca todos los usuarios de la base de datos
     public function get($params)
     {
         foreach ($params as $key => $param) {
@@ -102,6 +108,7 @@ class User extends Database
         return $users;
     }
 
+    //inserta un usuario en la base de datos (igual que el endpoint register)
     public function insert($params)
     {
         foreach ($params as $key => $param) {
@@ -125,7 +132,7 @@ class User extends Database
         }
     }
 
-
+    //actualiza un usuario
     public function update($id, $params)
     {
         foreach ($params as $key => $parm) {
@@ -158,10 +165,9 @@ class User extends Database
         }
     }
 
-    public
-        function delete(
-        $id
-    ) {
+    //elimina un usuario de la base de datos
+    public function delete($id)
+    {
         $affected_rows = parent::deleteDB($this->table, $id);
         if ($affected_rows == 0) {
             $response = array(
