@@ -30,7 +30,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         //busca la lista de mazos del usuario
         $decks = $deck->get($params);
         //monta la URL de la imagen del mazo
-        $url_raiz_img = "http://" . $_SERVER['HTTP_HOST'] . "/api-users/public/img";
+        $url_raiz_img = "http://" . $_SERVER['HTTP_HOST'] . "/mtg-deckbuilder/public/img";
         for ($i = 0; $i < count($decks); $i++) {
             if (!empty($decks[$i]['deckImage']))
                 $decks[$i]['deckImage'] = $url_raiz_img . "/" . $decks[$i]['deckImage'];

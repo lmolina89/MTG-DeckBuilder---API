@@ -17,7 +17,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		$usuarios = $user->get($params);
 
 		//monta la url donde se encuentra la imagen de cada usuario en el servidor
-		$url_raiz_img = "http://" . $_SERVER['HTTP_HOST'] . "/api-users/public/img";
+		$url_raiz_img = "http://" . $_SERVER['HTTP_HOST'] . "/mtg-deckbuilder/public/img";
 		foreach ($usuarios as $usuario) {
 			if (!empty($usuario['imageUri'])) {
 				$imagen = $usuario['imageUri'];

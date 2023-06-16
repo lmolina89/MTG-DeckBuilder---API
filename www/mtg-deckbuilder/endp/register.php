@@ -4,7 +4,7 @@ require_once '../modelos/user.class.php';
 
 //headers para CORS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-	header('Access-Control-Allow-Origin: *');
+#	header('Access-Control-Allow-Origin: *');
 	header('Access-Control-Allow-Methods: POST');
 	header('Access-Control-Allow-Headers: Content-Type');
 	exit;
