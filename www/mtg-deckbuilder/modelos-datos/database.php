@@ -15,7 +15,11 @@ class Database
             $this->connection = new PDO($dsn, $username, $password);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo 'Error de conexión a la base de datos: ' . $e->getMessage();
+            $response = array(
+                'result' => 'error',
+                'details' => 'Error de conexión a la base de datos: ' . $e->getMessage()
+            );
+            Response::result(400, $response);
             exit;
         }
     }
@@ -74,10 +78,10 @@ class Database
         $card_id = $data['id'];
         unset($data['deck_id']);
         $fields = implode(',', array_keys($data));
-        $values = '"' . implode('","', array_values($data)) . '"';
+        $placeholders = ':' . implode(',:', array_keys($data));
         $query_numCards = "UPDATE deck AS d JOIN (SELECT deck_id, SUM(numCards) AS totalCards FROM deckcard GROUP BY deck_id) AS dc ON d.id = dc.deck_id SET d.numCards = dc.totalCards";
         $query = "INSERT INTO $table_keys (deck_id, card_id, numCards) VALUES (:deck_id, :card_id, 1)";
-        $query_card = "INSERT INTO $table_cards ($fields) VALUES ($values)";
+        $query_card = "INSERT INTO $table_cards ($fields) VALUES ($placeholders)";
         $exist = false;
 
         foreach ($cards_db as $card_db) {
@@ -118,6 +122,7 @@ class Database
         $this->connection->query($query_numCards);
         return true;
     }
+
 
     //inserta mazos y usuarios en la base de datos
     public function insertDB($table, $data)
@@ -233,16 +238,19 @@ class Database
     {
         $deck_id = $data['deck_id'];
         $card_id = $data['card_id'];
-        $query = "DELETE FROM $table_dc WHERE deck_id = :deck_id AND card_id = ':card_id'";
+        $query = "DELETE FROM $table_dc WHERE deck_id = :deck_id AND card_id = :card_id";
+        $query_numCards = "UPDATE deck AS d JOIN ( SELECT deck_id, SUM(numCards) AS totalCards FROM deckcard GROUP BY deck_id) AS dc ON d.id = dc.deck_id SET d.numCards = dc.totalCards";
+
         try {
 
             $statement = $this->connection->prepare($query);
             $statement->bindValue(':deck_id', $deck_id, PDO::PARAM_INT);
             $statement->bindValue(':card_id', $card_id, PDO::PARAM_STR);
-
+            $statement->execute();
             if (!$statement->rowCount()) {
                 return 0;
             }
+            $this->connection->query($query_numCards);
             return $statement->rowCount();
         } catch (PDOException $e) {
             $response = array(
@@ -254,8 +262,7 @@ class Database
         }
     }
 
-    //elimina usuarios, mazos y cartas de sus respectivas tablas
-// elimina usuarios, mazos y cartas de sus respectivas tablas
+    // elimina usuarios, mazos y cartas de sus respectivas tablas
 
     public function deleteDB($table, $id)
     {
@@ -286,7 +293,6 @@ class Database
                 $statement = $this->connection->prepare($query);
                 $statement->bindValue(':id', $id, PDO::PARAM_INT);
                 $statement->execute();
-
                 //si no hay cambios devuelve 0
                 if (!$statement->rowCount()) {
                     return 0;

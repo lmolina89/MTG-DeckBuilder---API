@@ -138,7 +138,6 @@ class User extends Database
         foreach ($params as $key => $parm) {
             if (!in_array($key, $this->allowedConditions_update)) {
                 unset($params[$key]);
-                echo $params[$key];
                 $response = array(
                     'result' => 'error',
                     'details' => 'Error en la solicitud dentro del modelo datos'

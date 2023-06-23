@@ -60,7 +60,6 @@ class Authentication extends AuthModel
 	{
 		//error si no existe el token en el header
 		if (!isset($_SERVER['HTTP_API_KEY'])) {
-			echo "No existe HTTP_API_KEY";
 			$response = array(
 				'result' => 'error',
 				'details' => 'Usted no tiene los permisos para esta solicitud'
@@ -73,7 +72,6 @@ class Authentication extends AuthModel
 		//comprueba que el token que se envia en el header es el mismo que el usuario tiene en la base de datos
 		try {
 			$data = JWT::decode($jwt, $this->key, array('HS256'));
-			//echo "paso";
 			$user = parent::getById($data->data->id);
 			$this->idUser = $data->data->id;
 

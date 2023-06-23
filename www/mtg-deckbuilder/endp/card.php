@@ -14,7 +14,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $params = $_GET;
         //error si no se encuentra el deck_id en la URL
         if (!isset($_GET['deck_id']) || empty($_GET['deck_id'])) {
-            echo $_GET['id'];
             $response = array(
                 'result' => 'error',
                 'details' => 'El id no corresponde con el del usuario autenticado (cards). '
