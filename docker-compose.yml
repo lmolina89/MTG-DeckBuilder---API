@@ -11,12 +11,10 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - ./dump:/docker-entrypoint-initdb.d
-      # - ./conf:/etc/mysql/conf.d
       - persistent:/var/lib/mysql
     networks:
       - default
   www:
-    # build: .
     build:
       context: .
       dockerfile: Dockerfile
@@ -29,6 +27,8 @@ services:
       - db
     networks:
       - default
+    # command: sh -c "chmod -R 777 /var/www/html/mtg-deckbuilder/public && apache2-foreground"
+    command: sh -c "chmod -R 775 /var/www && chmod -R 777 /var/www/html/mtg-deckbuilder/public && apache2-foreground"
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     links:
