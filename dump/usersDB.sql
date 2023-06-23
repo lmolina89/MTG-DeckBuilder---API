@@ -83,7 +83,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `passwd`, `nick`, `token`, `admin`, `active`) VALUES
 (1, 'admin@admin.com', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', 'admin', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzcxNzI5NjgsImRhdGEiOnsiaWQiOiIxIiwiZW1haWwiOm51bGx9fQ.urEK9Hq6u4pz9q2Tuulcm1gWIfE2pDpkQDB5WDEbkFc', 1, 1),
-(2, 'lmolinamoreno@hotmail.com', '5663827deac9d358dc673eff746de182f10255a43b2d553d94d2d60869c25ff3', 'dummyplug_01', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2ODU4OTk3NzQsImRhdGEiOnsiaWQiOiIyIiwiZW1haWwiOiJsbW9saW5hbW9yZW5vQGhvdG1haWwuY29tIn19.9lPoMD5sURXpe7CnEm12ZMJbQxoiG-FrOzRFWBrwvJs', 0, 1);
+(2, 'lmolinamoreno@hotmail.com', '5663827DEAC9D358DC673EFF746DE182F10255A43B2D553D94D2D60869C25FF3', 'dummyplug_01', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2ODU4OTk3NzQsImRhdGEiOnsiaWQiOiIyIiwiZW1haWwiOiJsbW9saW5hbW9yZW5vQGhvdG1haWwuY29tIn19.9lPoMD5sURXpe7CnEm12ZMJbQxoiG-FrOzRFWBrwvJs', 0, 1);
 
 --
 -- Índices para tablas volcadas
