@@ -62,7 +62,7 @@ class Authentication extends AuthModel
 		if (!isset($_SERVER['HTTP_API_KEY'])) {
 			$response = array(
 				'result' => 'error',
-				'details' => 'Usted no tiene los permisos para esta solicitud'
+				'details' => 'No hay token para verificar el usuario'
 			);
 			Response::result(403, $response);
 			exit;
@@ -82,7 +82,7 @@ class Authentication extends AuthModel
 		} catch (\Throwable $th) {
 			$response = array(
 				'result' => 'error',
-				'details' => 'No tiene los permisos para esta solicitud'
+				'details' => 'No tienes los permisos para esta solicitud'
 			);
 			Response::result(403, $response);
 			exit;

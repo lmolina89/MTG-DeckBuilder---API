@@ -22,6 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $isAdmin = false;
     }
+    //si el usuario esta desactivado no permite el acceso
+    if ($auth->isActive($token) == 0) {
+        $response = [
+            'result' => 'ok',
+            'details' => 'Este usuario esta desactivado'
+        ];
+        Response::result(403, $response);
+        exit;
+    }
     //Respuesta que se envia al hacer login   								  	    	    	    	    	    	    	    	    	    
     $response = [
         'result' => 'ok',
@@ -29,6 +38,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'user_nick' => $nick,
         'admin' => $isAdmin
     ];
-    // se devuelve el token  
     Response::result(201, $response);
 }
