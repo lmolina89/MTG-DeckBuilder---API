@@ -16,10 +16,12 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+?)/?$ index.php?url=$1 [L,QSA]
 
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
 # headers para CORS
 <IfModule mod_headers.c>
     Header always set Access-Control-Allow-Origin "*"
     Header always set Access-Control-Allow-Methods "POST, GET, PUT, DELETE"
-    Header always set Access-Control-Allow-Headers "Content-Type"
-    Header append Access-Control-Allow-Headers "api-key"
+    Header always set Access-Control-Allow-Headers "Content-Type, api-key"
 </IfModule>

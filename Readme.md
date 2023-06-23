@@ -20,6 +20,12 @@ Para detener y eliminar los servicios definidos en docker-compose.yml, utiliza e
 sudo docker-compose down
 ```
 
+parar todos los contenedores de docker
+```cmd
+sudo docker stop $(sudo docker ps -aq)
+
+```
+
 Para ver los registros del contenedor con ID 5a21bee9ebb3, utiliza el siguiente comando:
 
 ```cmd
@@ -31,3 +37,4 @@ cuando se generan los certificados SSL, se crean dentro de la ruta
 ```cmd
 /etc/letsencrypt/live/mtgdeckbuilderapi.redirectme.net/
 ```
+
