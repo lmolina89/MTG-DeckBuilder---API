@@ -140,14 +140,14 @@ class User extends Database
                 unset($params[$key]);
                 $response = array(
                     'result' => 'error',
-                    'details' => 'Error en la solicitud dentro del modelo datos'
+                    'details' => 'Uno de los parametros no esta permitido al actualizar usuario'
                 );
                 Response::result(400, $response);
                 exit;
             }
         }
 
-        if ($this->validateUpdate($params)) {
+        if (isset($params['passwd'])) {
             $password_encriptada = hash('sha256', $params['passwd']);
             $params['passwd'] = $password_encriptada;
         }

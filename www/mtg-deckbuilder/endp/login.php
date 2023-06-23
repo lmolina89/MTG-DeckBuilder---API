@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //si el usuario esta desactivado no permite el acceso
     if ($auth->isActive($token) == 0) {
         $response = [
-            'result' => 'ok',
+            'result' => 'error',
             'details' => 'Este usuario esta desactivado'
         ];
         Response::result(403, $response);
