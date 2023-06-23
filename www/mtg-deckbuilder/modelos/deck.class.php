@@ -187,20 +187,20 @@ class Deck extends Database
     public function delete($id)
     {
         //Necesito eliminar su imagen, en el supuesto de que exista.
-//		$decks = parent::getDB($this->table, $_GET);
-//		$deck = $decks[0];
-//		$imagen_antigua = $deck['deckImage'];
-//		if (!empty($imagen_antigua)) {
-//			$path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
-//			if (!unlink($path)) {
-//				$response = array(
-//					'result' => 'warning',
-//					'details' => 'No se ha podido eliminar la imagen del usuario'
-//				);
-//				Response::result(200, $response);
-//				exit;
-//			}
-//		}
+        // $decks = parent::getDB($this->table, $_GET);
+        // $deck = $decks[0];
+        // $imagen_antigua = $deck['deckImage'];
+        // if (!empty($imagen_antigua)) {
+        //     $path = dirname(__DIR__, 1) . "/public/img/" . $imagen_antigua;
+        //     if (!unlink($path)) {
+        //         $response = array(
+        //             'result' => 'warning',
+        //             'details' => 'No se ha podido eliminar la imagen del usuario'
+        //         );
+        //         Response::result(200, $response);
+        //         exit;
+        //     }
+        // }
 
         parent::deleteDB($this->table_dc, $id);
 

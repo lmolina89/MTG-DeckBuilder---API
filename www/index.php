@@ -7,5 +7,5 @@ $few = $many + $many_2;
 
 print("$many + $many_2 = $few <br>");
 
-
+phpinfo();
 ?>

@@ -1,7 +1,10 @@
 FROM php:8.2-apache
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN docker-php-ext-install mysqli
+#Instala PDO de mysql
+RUN docker-php-ext-install pdo
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
 # Instalar mod_headers
 RUN apt-get update \
