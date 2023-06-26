@@ -108,7 +108,7 @@ class User extends Database
         return $users;
     }
 
-    //inserta un usuario en la base de datos (igual que el endpoint register)
+    //inserta un usuario en la base de datos 
     public function insert($params)
     {
         foreach ($params as $key => $param) {
@@ -127,7 +127,7 @@ class User extends Database
             //ahora debemos encriptar la password
             $password_encriptada = hash('sha256', $params['passwd']);
             $params['passwd'] = $password_encriptada;
-            //se llama al padre con el método inserDB.
+            //se llama al padre con la funcion insertDB.
             return parent::insertDB($this->table, $params);
         }
     }
