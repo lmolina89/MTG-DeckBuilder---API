@@ -16,12 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //se obtiene el nick a partir del token  
     $nick = $auth->getNick($token);
     //parsea la propiedad admin de integer a boolean
-    $isAdmin;
+    $isAdmin = false;
     if ($auth->isAdmin($token) == 1) {
         $isAdmin = true;
-    } else {
-        $isAdmin = false;
     }
+    //else {
+//        $isAdmin = false;
+//    }
     //si el usuario esta desactivado no permite el acceso
     if ($auth->isActive($token) == 0) {
         $response = [

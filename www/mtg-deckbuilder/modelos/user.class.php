@@ -38,6 +38,11 @@ class User extends Database
     //validar insertar usuario
     private function validateInsert($data)
     {
+        //expresiones regulares
+        $email_pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+        $password_pattern = '/^[a-zA-Z0-9]{5,}$/';
+
+        //validacion de email
         if (!isset($data['email']) || empty($data['email'])) {
             $response = array(
                 'result' => 'error',
@@ -45,8 +50,39 @@ class User extends Database
             );
             Response::result(400, $response);
             exit;
+        } else {
+            $email = $data['email'];
+            if (!preg_match($email_pattern, $email)) {
+                $response = array(
+                    'result' => 'error',
+                    'details' => 'El email no tiene un formato correcto'
+                );
+                Response::result(400, $response);
+                exit;
+            }
+            //compruebo si el email ya existe
+            try {
+                $users = parent::getDB($this->table, $email);
+                $exists = count($users);
+                if ($exists > 0) {
+                    $response = array(
+                        'result' => 'error',
+                        'details' => 'El email ya esta en uso'
+                    );
+                    Response::result(400, $response);
+                    exit;
+                }
+            } catch (Exception $e) {
+                $response = array(
+                    'result' => 'error',
+                    'details' => 'Error al consultar el email en la base de datos'
+                );
+                Response::result(500, $response);
+                exit;
+            }
         }
 
+        //validacion de nick
         if (!isset($data['nick']) || empty($data['nick'])) {
             $response = array(
                 'result' => 'error',
@@ -54,8 +90,31 @@ class User extends Database
             );
             Response::result(400, $response);
             exit;
+        } else {
+            //compruebo si el nick ya existe
+            $nick = $data['nick'];
+            try {
+                $users = parent::getDB($this->table, $nick);
+                $exists = count($users);
+                if ($exists > 0) {
+                    $response = array(
+                        'result' => 'error',
+                        'details' => 'El nick ya esta en uso'
+                    );
+                    Response::result(400, $response);
+                    exit;
+                }
+            } catch (Exception $e) {
+                $response = array(
+                    'result' => 'error',
+                    'details' => 'Error al consultar el nick en la base de datos'
+                );
+                Response::result(500, $response);
+                exit;
+            }
         }
 
+        //validacion de password
         if (!isset($data['passwd']) || empty($data['passwd'])) {
             $response = array(
                 'result' => 'error',
@@ -63,7 +122,19 @@ class User extends Database
             );
             Response::result(400, $response);
             exit;
+        } else {
+            $password = $data['passwd'];
+            if (!preg_match($password_pattern, $password)) {
+                $response = array(
+                    'result' => 'error',
+                    'details' => 'La contraseña no tiene un formato correcto'
+                );
+                Response::result(400, $response);
+                exit;
+            }
         }
+
+        //si los datos son correctos devuelve true
         return true;
     }
 
@@ -178,4 +249,5 @@ class User extends Database
         }
     }
 }
+
 ?>
