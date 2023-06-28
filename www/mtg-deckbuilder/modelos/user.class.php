@@ -62,7 +62,9 @@ class User extends Database
             }
             //compruebo si el email ya existe
             try {
-                $users = parent::getDB($this->table, $email);
+                $extra = [];
+                $extra['email'] = $email;
+                $users = parent::getDB($this->table, $extra);
                 $exists = count($users);
                 if ($exists > 0) {
                     $response = array(
@@ -94,7 +96,9 @@ class User extends Database
             //compruebo si el nick ya existe
             $nick = $data['nick'];
             try {
-                $users = parent::getDB($this->table, $nick);
+                $extra = [];
+                $extra['nick'] = $nick;
+                $users = parent::getDB($this->table, $extra);
                 $exists = count($users);
                 if ($exists > 0) {
                     $response = array(
@@ -118,7 +122,7 @@ class User extends Database
         if (!isset($data['passwd']) || empty($data['passwd'])) {
             $response = array(
                 'result' => 'error',
-                'details' => 'El password es obligatoria'
+                'details' => 'La contraseña es obligatoria'
             );
             Response::result(400, $response);
             exit;
