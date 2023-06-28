@@ -11,19 +11,28 @@ $user = new User();
 
 switch ($_SERVER['REQUEST_METHOD']) {
 	case 'GET':
-
+		$token = $_SERVER['HTTP_API_KEY'];
 		$params = $_GET;
+		//comprueba si el usuario es administrador
+		if(!$auth->isAdmin($token)){
+			$response = array(
+				'result' => 'error',
+				'details' => 'No tienes permisos de administrador'
+			);
+			Response::result(403, $response);
+			exit;
+		}
 		//busca la lista de usuarios
 		$usuarios = $user->get($params);
 
 		//monta la url donde se encuentra la imagen de cada usuario en el servidor
-		$url_raiz_img = "http://" . $_SERVER['HTTP_HOST'] . "/mtg-deckbuilder/public/img";
-		foreach ($usuarios as $usuario) {
-			if (!empty($usuario['imageUri'])) {
-				$imagen = $usuario['imageUri'];
-				$usuario['imageUri'] = $url_raiz_img . "/" . $imagen;
-			}
-		}
+		// $url_raiz_img = "http://" . $_SERVER['HTTP_HOST'] . "/mtg-deckbuilder/public/img";
+		// foreach ($usuarios as $usuario) {
+		// 	if (!empty($usuario['imageUri'])) {
+		// 		$imagen = $usuario['imageUri'];
+		// 		$usuario['imageUri'] = $url_raiz_img . "/" . $imagen;
+		// 	}
+		// }
 
 		$response = array(
 			'result' => 'ok',
